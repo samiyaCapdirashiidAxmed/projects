@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>coffee websit </title>
-    <link rel="stylesheet" href="style.css" >
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
     /* Reset */
 *{
@@ -185,6 +185,27 @@ body{
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+
+    /* Social Media Footer Styling */
+.social-icons {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between icons */
+}
+
+.social-icons a {
+    color: wheat;
+    font-size: 28px; /* Size of the icons */
+    text-decoration: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect: Scale up and change color */
+.social-icons a:hover {
+    color: #FFD700; /* Gold color */
+    transform: scale(1.2); /* Slightly enlarges the icon */
+}
 }
 </style>
             
@@ -193,6 +214,8 @@ body{
     <body >
          
         <!--header/navbar-->
+
+
         <header>
             <nav class="navbar section-contnant">
                 <a href="#" class="nav-logo">
@@ -257,7 +280,16 @@ body{
     </body></center>
 
     <footer>
-                                            All Copy Right is ISKAASHI GROUP
+                                            <footer>
+    <div class="social-icons">
+        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+    </div>    
+
+    <p>&copy; 2026 ISKAASHI GROUP - All Rights Reserved</p>
+</footer>
                                                                                                                                                                                                                                                                                       
 
     </footer>
