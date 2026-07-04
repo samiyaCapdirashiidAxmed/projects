@@ -6,6 +6,188 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>coffee websit </title>
     <link rel="stylesheet" href="style.css" >
+<style>
+    /* Reset */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #333;
+}
+
+/* Navbar */
+header{
+    background: #6F4E37;
+    padding: 15px 0;
+}
+
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+}
+
+.logo-text{
+    color: white;
+    font-size: 30px;
+}
+
+
+.nav-menu{
+    list-style: none;
+    display: flex;
+}
+
+.nav-item{
+    margin-left: 20px;
+}
+
+.nav-link{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.nav-link:hover{
+    color: #FFD700;
+}
+
+/* Hero Section */
+.hero-section{
+    min-height: 90vh;
+    background: linear-gradient(rgba(0,0,0,0.5),
+    rgba(0,0,0,0.5)),
+    url('ww.gbj.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-contenat{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+    color: white;
+}
+
+.hero-details{
+    max-width: 600px;
+}
+
+.titel{
+    font-size: 50px;
+    color: #FFD700;
+    margin-bottom: 15px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.description{
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.buttons{
+    margin-top: 20px;
+}
+
+.order-now,
+.contact-us{
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 25px;
+    margin-right: 10px;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.order-now{
+    background: #FFD700;
+    color: black;
+}
+
+.order-now:hover{
+    background: white;
+}
+
+.contact-us{
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.contact-us:hover{
+    background: white;
+    color: black;
+}
+
+/* Image */
+.hero-image{
+    width: 400px;
+    border-radius: 150px;
+    box-shadow: 0 5px 15px rgba(153, 118, 118, 0.5);
+    height: 500;
+    border: 20px;
+    object-fit: cover;
+    background-image: url("image.png");
+    background-position: center;
+    
+
+}
+
+/* Footer */
+footer{
+    background: #6F4E37;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media(max-width:768px){
+    .section-contenat{
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-image{
+        width: 300px;
+        margin-top: 20px;
+    }
+
+    .navbar{
+        flex-direction: column;
+    }
+
+    .nav-menu{
+        margin-top: 10px;
+    }
+}
+body{
+    font-family: Arial, sans-serif;
+    color: #333;
+
+    background-image: url('image.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+</style>
+            
     </head>
    
     <body >
