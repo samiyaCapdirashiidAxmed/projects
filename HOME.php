@@ -24,7 +24,7 @@
                 
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="logo.php" class="nav-link">logING </a>
+                        <a href="logo.php" class="nav-link">lOGING </a>
                     </li>
                 </ul>
                 <ul class="nav-menu">
@@ -34,17 +34,17 @@
                 </ul>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="DELET.php" class="nav-link">APPOMENT</a>
+                        <a href="APPOMENT.php" class="nav-link">APPOMENT</a>
                     </li>
                 </ul>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="gallery.html" class="nav-link">DECTORE </a>
+                        <a href="DECTORE.php" class="nav-link">DECTORE </a>
                     </li>
                 </ul>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">bBOOKING</a>
+                        <a href="BOOKING.php" class="nav-link">BOOKING</a>
                     </li>
                 </ul>
             </nav>
