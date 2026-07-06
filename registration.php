@@ -93,7 +93,7 @@ echo"this information was saved";
 
 body {
             /* Ku dar sawirkaaga halkan */
-            background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1920&auto=format&fit=crop');
+            background-image: url('image2.avif');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
