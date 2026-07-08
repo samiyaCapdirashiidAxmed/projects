@@ -1,9 +1,55 @@
 <?php
-$message="";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "software_project_management1";
 
-if(isset($_POST['book'])){
-    $message="Your appointment has been booked successfully!";
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+
+$message = "";
+
+if (isset($_POST['book'])) {
+
+    $fullname = $_POST['fullname'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $doctor = $_POST['doctor'];
+    $department = $_POST['department'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
+    $notes = $_POST['notes'];
+
+    $sql = "INSERT INTO appointments
+    (fullname, email, phone, doctor, department, date, time, notes)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param(
+        "ssssssss",
+        $fullname,
+        $email,
+        $phone,
+        $doctor,
+        $department,
+        $date,
+        $time,
+        $notes
+    );
+
+    if ($stmt->execute()) {
+        $message = "Appointment booked successfully!";
+    } else {
+        $message = "Booking failed!";
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
