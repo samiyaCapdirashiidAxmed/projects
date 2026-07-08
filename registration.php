@@ -93,7 +93,7 @@ echo"this information was saved";
 
 body {
             /* Ku dar sawirkaaga halkan */
-            background-image: url('image2.avif');
+            background-image: url('image4.avif');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -283,7 +283,7 @@ footer {
 
 </head>
 <body >
-    <h1> welcom registration page</h1>
+    <h1>   PATIENT REGISTRATION  </h1>
 
 
     <form method="POST" >
