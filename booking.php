@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date_out = $_POST['date_out'];
 
     // Insert booking into database
-    $sql = "INSERT INTO booking (patient, room, date_in, date_out)
+    $sql = "INSERT INTO  booking (patient, room, date_in, date_out)
             VALUES (?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);

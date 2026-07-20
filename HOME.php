@@ -220,17 +220,17 @@ body{
         <header>
             <nav class="navbar section-contnant">
                 <a href="#" class="nav-logo">
-                    <h2 class="logo-text">hospital  </h2>
+                    <h2 class="logo-text">🏥hospital  </h2>
                 </a>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="registration.php" class="nav-link">registration</a>
+                        <a href="registration.php" class="nav-link">👤registration</a>
                     </li>
                 </ul>
                 
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="logo.php" class="nav-link">LOGING </a>
+                        <a href="logo.php" class="nav-link">🔑LOGING </a>
                     </li>
                 </ul>
                 <ul class="nav-menu">
@@ -240,17 +240,17 @@ body{
                 </ul>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="appoiment.php" class="nav-link">APPOMENT</a>
+                        <a href="appoiment.php" class="nav-link">📅APPOMENT</a>
                     </li>
                 </ul>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">DECTORE </a>
+                        <a href="doctor.php" class="nav-link">👨‍⚕️DOCTORE </a>
                     </li>
                 </ul>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">BOOKING</a>
+                        <a href="booking.php" class="nav-link">📅BOOKING</a>
                     </li>
                 </ul>
             </nav>
