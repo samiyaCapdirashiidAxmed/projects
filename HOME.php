@@ -26,7 +26,7 @@ body {
 }
 /* Navbar */
 header{
-    background: #6F4E37;
+    background: #444afe;
     padding: 15px 0;
 }
 
@@ -153,7 +153,7 @@ header{
 
 /* Footer */
 footer{
-    background: #6F4E37;
+    background: #2d1cca;
     color: white;
     text-align: center;
     padding: 15px;
@@ -182,7 +182,7 @@ footer{
 }
 body{
     font-family: Arial, sans-serif;
-    color: #aa7f7f;
+    color: #2aa3c2;
 
     background-image: url('image3.webp');
     background-size: cover;
@@ -207,7 +207,7 @@ body{
 
 /* Saamaynta marka mouse-ka la saaro */
 .social-icons a:hover {
-    color: #23e909; /* Midabka dahabiga ah */
+    color: #dc7ce2; /* Midabka dahabiga ah */
     transform: scale(1.2);
 }
 
@@ -224,7 +224,7 @@ body{
                 </a>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="registration.php" class="nav-link">👤registration</a>
+                        <a href="paint.php" class="nav-link">👤registration</a>
                     </li>
                 </ul>
                 
@@ -233,11 +233,7 @@ body{
                         <a href="logo.php" class="nav-link">🔑LOGING </a>
                     </li>
                 </ul>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="Edit.php" class="nav-link">EDINT</a>
-                    </li>
-                </ul>
+        
                 <ul class="nav-menu">
                     <li class="nav-item">
                         <a href="appoiment.php" class="nav-link">📅APPOMENT</a>
@@ -253,6 +249,11 @@ body{
                         <a href="booking.php" class="nav-link">📅BOOKING</a>
                     </li>
                 </ul>
+                 <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="reportpage.php" class="nav-link">📅REPORT</a>
+                    </li>
+                </ul>
             </nav>
         </header>
         
@@ -266,7 +267,7 @@ body{
                         <p class="description">Welcome to our hospital, where every patient matters and every treatment brings hope and healing.</p>
       </p>
                         <div class="buttons">
-            <a href="logo.php" class="buttons order-now">loging</a><br>
+            <a href="paint.php" class="buttons order-now">loging</a><br>
           
         </div>      
         
