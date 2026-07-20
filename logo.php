@@ -1,124 +1,179 @@
+<?php
 
+include("conection.php");
 
+$message = "";
 
+if(isset($_POST["login_btn"])){
 
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
+
+    $sql = "SELECT username, fullname, password FROM registration1 WHERE username=?";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    if(mysqli_num_rows($result) == 1){
+
+        $row = mysqli_fetch_assoc($result);
+
+        
+        if(trim($password) === trim($row["password"])){
+
+    session_start();
+    $_SESSION["username"] = $row["username"];
+    $_SESSION["fullname"] = $row["fullname"];
+
+    exit();
+
+     header("Location: HOME.php");
+
+}else{
+
+    $message = "Incorrect Password!";
+
+}
+
+        }else{
+
+            $message = "Incorrect Password!";
+
+        }
+
+    }else{
+
+        $message = "Username not found!";
+
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login Page</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-    font-family: Arial, sans-serif;
-    /* Sets the page background to Navy Blue */
-    background-color: #000080; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-        /* New main container for two columns */
-        .main-container {
-            display: flex;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            width: 700px;
-            max-width: 90%;
-        }
-        /* Left Side: Welcome Message */
-        .welcome-side {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: white;
-            padding: 40px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        /* Right Side: Login Form */
-        .login-side {
-            padding: 40px;
-            flex: 1;
-        }
-        .login-box { text-align: center; }
-        .logo { width: 80px; margin-bottom: 15px; }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            background: #3c39d1;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-.social-icons {
-    margin-top: 20px;
-}
+<meta charset="UTF-8">
+<title>Login Page</title>
 
-.social-icons a {
-    color: white;
-    font-size: 24px;
-    margin: 0 10px;
-    text-decoration: none;
-    transition: 0.3s;
-}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-.social-icons a:hover {
-    color: #95f7be; /* Light blue color when hovering */
-    transform: scale(1.2);
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#000080;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
 }
+.main-container{
+    display:flex;
+    width:700px;
+    background:#fff;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,.3);
+}
+.welcome-side{
+    flex:1;
+    background:linear-gradient(135deg,#6a11cb,#2575fc);
+    color:#fff;
+    padding:40px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+.login-side{
+    flex:1;
+    padding:40px;
+}
+.logo{
+    width:80px;
+}
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+.submit-btn{
+    width:100%;
+    padding:12px;
+    background:#3c39d1;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+.submit-btn:hover{
+    background:#2575fc;
+}
+.forgot-password{
+    text-align:right;
+    margin:10px 0;
+}
+.forgot-password a{
+    text-decoration:none;
+    color:#3c39d1;
+}
+.message{
+    color:red;
+    text-align:center;
+    margin-bottom:10px;
+}
+</style>
 
-        }
-    </style>
 </head>
 <body>
 
 <div class="main-container">
-    <!-- Welcome Section -->
-    <div class="welcome-side">
-        
-    <!-- Welcome Section -->
-<div class="welcome-side">
-    <h1>Welcome Back!</h1>
-    <p>Please enter your credentials to access your account.</p>
-    
-    <!-- Social Icons -->
-    <div class="social-icons">
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-linkedin"></i></a>
-    </div>
-</div>
-    </div>
 
-    <!-- Login Section -->
-    <div class="login-side">
-        <div class="login-box">
-            <img src="image1.jpg" class="logo" alt="Logo">
-            <h2>Login</h2>
-            <form action="registration.php" method="POST">
-                <input type="text" name="username" placeholder="Enter username" required>
-                <input type="password" name="password" placeholder="Enter Password" required>
-                <button type="submit" name="login_btn" class="submit-btn">LOGIN</button>
-            </form>
-            <a href="registration.php" style="display:block; margin-top:15px; font-size:14px;">Need an account? Register</a>
-        </div>
-    </div>
+<div class="welcome-side">
+<h1>Welcome Back!</h1>
+<p>Please enter your credentials to access your account.</p>
+</div>
+
+<div class="login-side">
+
+<center>
+<img src="image1.jpg" class="logo">
+<h2>Login</h2>
+</center>
+
+<?php
+if($message!=""){
+    echo "<div class='message'>$message</div>";
+}
+?>
+
+<form method="POST">
+
+<input type="text" name="username" placeholder="Enter Username" required>
+
+<input type="password" name="password" placeholder="Enter Password" required>
+
+<div class="forgot-password">
+<a href="forgot_password.php">Forgot Password?</a>
+</div>
+
+<button type="submit" name="login_btn" class="submit-btn">
+LOGIN
+</button>
+
+</form>
+
+<br>
+
+<center>
+<a href="paint.php">Need an account? Register</a>
+</center>
+
+</div>
+
 </div>
 
 </body>
