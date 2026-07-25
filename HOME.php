@@ -118,7 +118,7 @@ header{
 }
 
 .order-now{
-    background: #FFD700;
+    background: #e7f927;
     color: black;
 }
 
@@ -267,7 +267,7 @@ body{
                         <p class="description">Welcome to our hospital, where every patient matters and every treatment brings hope and healing.</p>
       </p>
                         <div class="buttons">
-            <a href="paint.php" class="buttons order-now">loging</a><br>
+            <a href="paint.php" class="buttons order-now">👤registration</a><br>
           
         </div>      
         

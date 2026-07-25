@@ -27,10 +27,10 @@ if(isset($_POST["login_btn"])){
     $_SESSION["username"] = $row["username"];
     $_SESSION["fullname"] = $row["fullname"];
 
-    exit();
+
 
      header("Location: HOME.php");
-
+    exit();
 }else{
 
     $message = "Incorrect Password!";

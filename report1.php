@@ -33,7 +33,7 @@ $result = $con->query($sql);
 <title>Hospital Booking Report</title>
 
 <style>
-
+/* Reset */
 *{
     margin:0;
     padding:0;
@@ -41,69 +41,89 @@ $result = $con->query($sql);
 }
 
 body{
-    font-family:'Segoe UI',sans-serif;
-    background:#ffffff;
-    min-height:100vh;
-    padding:40px;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f7fb;
+    padding:30px;
 }
 
+/* Container */
 .container{
     width:95%;
     max-width:1200px;
     margin:auto;
     background:#fff;
-    border-radius:15px;
-    padding:30px;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.2);
 }
 
+/* Heading */
 h1{
     text-align:center;
     color:#0d6efd;
     margin-bottom:25px;
 }
 
+/* Search Box */
 .search-box{
     display:flex;
     justify-content:center;
     gap:10px;
-    margin-bottom:20px;
+    margin-bottom:25px;
+    flex-wrap:wrap;
 }
 
 .search-box input{
-    padding:10px;
-    width:250px;
-    border:1px solid #0d6efd;
-    border-radius:5px;
+    width:320px;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:16px;
 }
 
 .btnsearch{
     background:#0d6efd;
     color:#fff;
     border:none;
-    padding:10px 20px;
-    border-radius:5px;
+    padding:12px 20px;
+    border-radius:6px;
     cursor:pointer;
+    font-size:16px;
 }
 
 .btnsearch:hover{
     background:#0b5ed7;
 }
 
+.back{
+    text-decoration:none;
+    background:#6c757d;
+    color:white;
+    padding:12px 20px;
+    border-radius:6px;
+}
+
+.back:hover{
+    background:#5c636a;
+}
+
+/* Table */
 table{
     width:100%;
     border-collapse:collapse;
+    margin-top:20px;
 }
 
 table th{
     background:#0d6efd;
-    color:#fff;
-    padding:15px;
+    color:white;
+    padding:14px;
+    border:1px solid #ddd;
 }
 
 table td{
-    padding:14px;
-    border-bottom:1px solid #ddd;
+    padding:12px;
+    border:1px solid #ddd;
     text-align:center;
 }
 
@@ -112,29 +132,79 @@ table tr:nth-child(even){
 }
 
 table tr:hover{
-    background:#d6ecff;
+    background:#dbeafe;
+}
+
+/* Buttons */
+.btn,
+.print-btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:12px 20px;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:16px;
+    cursor:pointer;
+    border:none;
 }
 
 .btn{
-    display:inline-block;
-    margin-top:20px;
-    padding:12px 25px;
-    background:#0d6efd;
-    color:#fff;
-    text-decoration:none;
-    border-radius:8px;
-    font-weight:bold;
+    background:#198754;
+    color:white;
 }
 
 .btn:hover{
-    background:#0b5ed7;
+    background:#157347;
 }
 
-.print{
-    border:none;
-    cursor:pointer;
-    margin-left:10px;
+.print-btn{
+    background:#fd7e14;
+    color:white;
+    float:right;
 }
+
+.print-btn:hover{
+    background:#e76b00;
+}
+
+/* Print */
+@media print{
+
+    .search-box,
+    .btn,
+    .print-btn{
+        display:none;
+    }
+
+    body{
+        background:white;
+        padding:0;
+    }
+
+    .container{
+        box-shadow:none;
+        width:100%;
+    }
+}
+
+/* Mobile */
+@media(max-width:768px){
+
+    table{
+        display:block;
+        overflow-x:auto;
+        white-space:nowrap;
+    }
+
+    .print-btn,
+    .btn{
+        width:100%;
+        margin-top:15px;
+        float:none;
+        text-align:center;
+    }
+}
+
 
 </style>
 
@@ -156,6 +226,10 @@ table tr:hover{
     <button type="submit" name="btnsearch" class="btnsearch">
         🔍 Search
     </button>
+    
+    <a href="report2.php" class="back">
+Reset
+</a>
 
 </form>
 
@@ -192,7 +266,7 @@ table tr:hover{
 
 <a href="booking.php" class="btn">⬅ Back To Booking</a>
 
-<button type="button" class="btn print" onclick="window.print()">
+<button class="print-btn" onclick="window.print()">
 🖨 Print Report
 </button>
 
