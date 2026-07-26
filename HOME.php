@@ -17,7 +17,7 @@
 
 body {
     /
-    background: #706060 url('image3.webp') no-repeat center center fixed;
+    background: #706060 url('home.jpg') no-repeat center center fixed;
     
     background-size: cover;
     
@@ -145,7 +145,7 @@ header{
     height: 500;
     border: 20px;
     object-fit: cover;
-    background-image: url("image.png");
+    background-image: url("home.jpg");
     background-position: center;
     
 
@@ -184,7 +184,7 @@ body{
     font-family: Arial, sans-serif;
     color: #2aa3c2;
 
-    background-image: url('image3.webp');
+    background-image: url('home.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

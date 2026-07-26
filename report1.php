@@ -213,7 +213,7 @@ table tr:hover{
 
 <div class="container">
 
-<h1>🏥 Hospital Room Booking Report</h1>
+<h1>🏥 Hospital  Report</h1>
 
 <form method="POST" class="search-box">
 
@@ -227,8 +227,8 @@ table tr:hover{
         🔍 Search
     </button>
     
-    <a href="report2.php" class="back">
-Reset
+    <a href="report1.php" class="back">
+        🔄 Reset
 </a>
 
 </form>

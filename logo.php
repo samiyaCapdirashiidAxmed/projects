@@ -29,7 +29,7 @@ if(isset($_POST["login_btn"])){
 
 
 
-     header("Location: HOME.php");
+     header("Location: registration.php");
     exit();
 }else{
 

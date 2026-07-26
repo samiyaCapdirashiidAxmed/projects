@@ -186,20 +186,33 @@ footer {
 .footer-content p {
     margin-bottom: 15px; /* Kala fogaanshaha qoraalka iyo icons-ka */
 }
-
-.social-icons a {
-    font-size: 24px;
-    margin: 0 15px;
-    color: white;
-    text-decoration: none;
-    transition: 0.3s;
+.social-icons{
+    margin-top:20px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
 }
 
-.social-icons a:hover {
-    color: #f1c40f; /* Midab jaalle ah marka mouse-ka la saaro */
-    transform: scale(1.2);
+.social-icons a{
+    width:32px;
+    height:32px;
+    background:white;
+    color:#2575fc;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    font-size:15px;
+    transition:0.3s;
+    box-shadow:0 3px 6px rgba(0,0,0,0.2);
 }
 
+.social-icons a:hover{
+    transform:translateY(-3px);
+    background:#ffd700;
+    color:#000080;
+}
 </style>
 
 </head>
@@ -218,6 +231,12 @@ footer {
             Register as a patient to book appointments,
             manage your profile and access hospital services online.
         </p>
+        <div class="social-icons">
+
+   
+        
+
+</div>
         
 
     </div>

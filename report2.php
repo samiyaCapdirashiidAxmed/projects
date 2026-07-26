@@ -139,7 +139,7 @@ tr:nth-child(even){
 </button>
 
 <a href="report2.php" class="back">
-Reset
+        🔄 Reset
 </a>
 
 </form>

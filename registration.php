@@ -1,450 +1,276 @@
-
-
-
 <?php
-include_once("conection.php"); //conection to my sql
-$idbanaan=$fnamebanaan=$lastnamebanaan=$emailbanaan=$phonebanaan=""; // halka ku shegaysa in ay maqantay (xog aanad soo galin ) magacyadooda 
-if (isset($_POST['btnsave']))
-{
-    // conditions of if {halkay soo galayaan xogto }
+include "conection.php";
 
-    $id=$_POST["txtID"]; 
-    $name=$_POST['txtfirst'];
-    $last=$_POST['txtlast'];
-       $emial=$_POST['txtemail'];
-       $phonenumber=$_POST['txtphone'];
+// Total Doctors
+$doctor = mysqli_query($con, "SELECT COUNT(*) AS total FROM appoment");
+$doctor_total = mysqli_fetch_assoc($doctor)['total'];
 
-//hadii oo banaayey soo gali [waa halka ku shegaysa in hadii colum banaan ka tagtid in oo banaan yey]
-if(empty($id)){
-$idbanaan="please enter your id";
+// Total Patients
+$patient = mysqli_query($con, "SELECT COUNT(*) AS total FROM registration1");
+$patient_total = mysqli_fetch_assoc($patient)['total'];
 
-}
- if(empty($name)){
-$fnamebanaan="please enter your ferst name";
-//echo $fnamebanaan;
-}
+// Total Bookings/Appointments
+$booking = mysqli_query($con, "SELECT COUNT(*) AS total FROM booking");
+$booking_total = mysqli_fetch_assoc($booking)['total'];
 
-if(empty($name)){
-$lastnamebanaan="please enter your last name";
-
-}
-if(empty($name)){
-$emailbanaan="please enter your last email";
-
-}
-if(empty($id)){
-$phonebanaan="please enter your last email";
-
-}
-
-    //id is not more than 6 only can write 1 up to 5 ina udhaxaysa 
-    //waxay ku xadidaysaa numberka soo galaaya id ga 
-  if (!ctype_digit($id)|| strlen($id)>6)
-  
-  {
-          echo"id must not be more than 6 digits".$id;
-     
-
-    }
-    else if (preg_match('/^[0-9]{6}$/',$id)){
-    
-        echo"valid id".$id;
-    }
-
-    else{
-$sql="insert into registration set id='".$id."',fname='".$name."',lastname='".$last."',email='".$emial."',phone='".$phonenumber."'";//waa halka ay ka soo galyaan xogta databaseka hadii aya singl cout double ka u dhxeeyo 
-
-$result=$con->query($sql); // waxa oo ku xidhmayaa sql page kii kale ee ahaa conectionka 
-echo"this information was saved";
-
-    //waa inta soo saray sa marka add ka tagtid mid kamida 
-    echo"welecom your id  is :-".$id;
-    
-  
-    echo"welecom your first name is :-".$name;
-
-  
-    echo"welecom your last name is :-".$last;
-
-     
-    echo"welecom your email is :-".$emial;
-
-        echo"welecom your phone number is :-".$phonenumber;
-
-    }
-
-}   
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>second php lesson</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 <style>
-/* General Body Style */
 
-/* BODY */
-
-body {
-            /* Ku dar sawirkaaga halkan */
-            background-image: url('image4.avif');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            
-            /* Ku dar midab madow oo daciif ah si qoraalka cad u muuqdo */
-            background-color: rgba(0, 0, 0, 0.4);
-            background-blend-mode: overlay;
-
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-
-/* TITLE */
-h1{
-    text-align: center;
-    color: #fff;
-    font-size: 38px;
-    margin-bottom: 25px;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
-/* CLEAN WHITE CARD */
-form{
-    width: 60%;
-    margin: auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 25px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+body{
+background:#eef5fb;
 }
 
-/* LABELS */
-form{
-    color: #2c3e50;
-    font-weight: bold;
+.header{
+background:#0077b6;
+color:white;
+padding:20px;
+text-align:center;
+font-size:30px;
+font-weight:bold;
 }
 
-/* INPUTS */
-input[type="text"],
-input[type="number"]{
-    width: 95%;
-    padding: 12px;
-    border: 2px solid #dbe4ff;
-    border-radius: 15px;
-    margin-bottom: 15px;
-    font-size: 15px;
-    transition: 0.3s;
+.container{
+display:flex;
+min-height:90vh;
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus{
-    border-color: #2563eb;
-    box-shadow: 0 0 10px rgba(37,99,235,0.3);
-    outline: none;
+.sidebar{
+    width:220px;
+    background:#023e8a;
 }
 
-/* PROFESSIONAL BLUE BUTTON */
-input[type="submit"]{
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: 0.3s;
-    
+.sidebar h2{
+    color:white;
+    text-align:center;
+    padding:18px;
+    font-size:20px;
+    border-bottom:1px solid rgba(255,255,255,.3);
 }
 
-input[type="submit"]:hover{
-    background: #9b20e8;
-    transform: translateY(-2px);
+.sidebar a{
+    display:block;
+    padding:14px 18px;
+    color:white;
+    text-decoration:none;
+    font-size:16px;
+    border-bottom:1px solid rgba(255,255,255,.1);
+    transition:0.3s;
 }
 
-/* TABLE */
-table{
-    width: 90%;
-    margin: 30px auto;
-    background: white;
-    border-collapse: collapse;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+.sidebar a:hover{
+    background:#0096c7;
+    padding-left:25px;
 }
 
-th{
-    background: #2563eb;
-    color: white;
-    padding: 15px;
-    font-size: 16px;
+.content{
+    flex:1;
+    padding:20px;
+}
+.content{
+flex:1;
+padding:30px;
 }
 
-td{
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #eee;
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
 }
 
-tr:nth-child(even){
-    background: #f8fafc;
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:10px;
 }
 
-tr:hover{
-    background: #a4b4f8;
-    transition: 0.3s;
+.card{
+    background:white;
+    border-radius:8px;
+    padding:12px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+    transition:.3s;
 }
 
-/* GREEN EDIT BUTTON */
-.edit-btn{
-    background: #16a34a;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
+.card:hover{
+    transform:translateY(-2px);
 }
 
-.edit-btn:hover{
-    background: #15803d;
-    transform: scale(1.05);
+.card h3{
+    color:#0077b6;
+    font-size:15px;
+    margin-bottom:8px;
 }
 
-/* RED DELETE BUTTON */
-.delete-btn{
-    background: #dc2626;
-    color:#2563eb;
-    padding: 8px 16px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
+.card h1{
+    font-size:28px;
+    color:#023e8a;
+    margin-bottom:8px;
 }
 
-.delete-btn:hover{
-    background: #b91c1c;
-    transform: scale(1.05);
-}
-form{
-    width: 60%;
-    max-width: 600px;
-    margin: 30px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 25px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-h1{
-    text-align: center;
-    color: white;
-    margin-bottom: 20px;
-}
-.btnsave :hover{
-    background: #a34df3;
+.card p{
+    font-size:12px;
+    color:#666;
+    margin-bottom:10px;
 }
 
-footer {
-    text-align: center;
-    padding: 40px;
-    color: white;
-    font-size: 16px;
-    margin-top: 50px;
-    background: rgba(0, 0, 0, 0.2); /* Wax yar oo hoos u dhac ah si footer-ku u muuqdo */
+.card a{
+    display:inline-block;
+    padding:6px 12px;
+    background:#0077b6;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+    font-size:11px;
 }
 
-.footer-content p {
-    margin-bottom: 15px; /* Kala fogaanshaha qoraalka iyo icons-ka */
+.card a:hover{
+    background:#005f8d;
 }
 
-.social-icons a {
-    font-size: 24px;
-    margin: 0 15px;
-    color: white;
-    text-decoration: none;
-    transition: 0.3s;
+.footer{
+background:#0077b6;
+color:white;
+text-align:center;
+padding:15px;
 }
 
-.social-icons a:hover {
-    color: #f1c40f; /* Midab jaalle ah marka mouse-ka la saaro */
-    transform: scale(1.2);
+.social-icons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin:20px 0;
+}
+
+.social-icons a{
+    width:45px;
+    height:45px;
+    background:#0077b6;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    font-size:20px;
+    transition:0.3s;
+}
+
+.social-icons a:hover{
+    background:#005f8d;
+    transform:translateY(-5px);
 }
 
 </style>
 
 </head>
-<body >
-    <h1>   PATIENT REGISTRATION  </h1>
+
+<body>
+
+<div class="header">
+Hospital Management System Dashboard
+</div>
+
+<div class="container">
+
+<div class="sidebar">
+
+<h2>MENU</h2>
+
+<a href="dashboard.php">🏠 Dashboard</a>
+
+<a href="doctor.php">👨‍⚕️ Doctor Registration</a>
+
+<a href="paint.php">🧑 Patient Registration</a>
+
+<a href="appoiment.php">📅 Appointment</a>
+
+<a href="booking.php">📑 Booking Report</a>
+<a href="reportpage.php">📋 Doctor Report</a>
+
+<a href="logout.php">🚪 Logout</a>
+
+</div>
+
+<div class="content">
+
+<div class="cards">
+
+<div class="card">
+<h3>BOOKING </h3>
+
+<h1><?php echo $doctor_total; ?></h1>
+
+<p>Total booking</p>
+
+<a href="report.php">View Report</a>
+
+</div>
+
+<div class="card">
+
+<h3>🧑 Patients</h3>
+
+<h1><?php echo $patient_total; ?></h1>
+
+<p>Total Registered Patients</p>
+
+<a href="report2.php">View Report</a>
+
+</div>
+
+<div class="card">
+
+<h3>📅 Appointments</h3>
+
+<h1><?php echo $booking_total; ?></h1>
+
+<p>Total appoment</p>
+
+<a href="report1.php">View Report</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+© 2026 Hospital Management System | Dashboard
+<div class="social-icons">
+    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+
+    <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+
+    <a href="https://twitter.com" target="_blank"><i class="fab fa-x-twitter"></i></a>
+
+    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+
+    <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+
+    <a href="https://wa.me/252612345678" target="_blank"><i class="fab fa-whatsapp"></i></a>
+</div>
+
+</div>
 
 
-    <form method="POST" >
-
-            ID care:  <input type ="number " name ="txtID" >
-        
-    <?php
-    echo $idbanaan;
-    ?>
-    <br>
-    <br>
-    <BR>
-     f-name :<input type ="text " name ="txtfirst">
-     <?php
-echo $fnamebanaan; //waa ku wa inoo suragalinaaya aynu ogaano in oo banaanyey
-  ?>
-</BR>
-
-  <br>
-  
-    <BR>
-    last-name :<input type ="text " name ="txtlast">
-    <?php
-echo $lastnamebanaan;
-  ?>
-</BR>
-
-  <br>
-  
-    <BR>
-     emial:<input type ="text " name ="txtemail">
-      <?php
-echo $emailbanaan;
-  ?>
-    <br>
-</BR>
-phone number:<input type ="text " name ="txtphone">
-      <?php
-echo $phonebanaan;
-  ?>
-    <br>
-</BR>
-
-<input type ="submit" name="btnsave" value="SUBMIT"> 
-<br>
-</br>
-   search by ID:<input type ="text " name ="txtsearch">
-      <?php
-echo $emailbanaan;
-  ?>
-  
-<input type ="submit" name="btnsearch" value="search"> 
-<br>
-
-</form>
-
-
-
-
-<!-- tables -->
-<table border="7">
-
-<thead>
-
-<h3>
-<th>id</th>
-<th>fname</th>
-<th>lastname</th>
-<th>email</th>
-
-<th>action</th>
-
-
-</h3>
-</thead>
-<tbody>
-<?php
-
-if(isset($_POST['btnsearch'])) // searchin id
-{
-  $search=$_POST['txtsearch'];
-  $ss="select * from registration where id='".$search."'";//sql con in table 
-  $ress=$con->query($ss);
-
-  if(mysqli_num_rows($ress)==true)
-    {
-    foreach($ress as $rows)//loop 
-      {
-?>
-<tr><td><?=$rows['id']?></td>
-<td><?=$rows['fname']?></td>
-
-<td><?=$rows['lastname']?></td>
-
-<td><?=$rows['email']?></td>
-
-<td><?=$rows['phone']?></td>
-
-
-</tr>
-<?php
-    }
-    
-    }
-    if($search=="")// haday bannantay 
-      {
-         $show="select * from registration ";
-  $res=$con->query($show);
-  if($res)//condition 
-    {
-while($row=$res->fetch_assoc()){      // fetch_assoc= waka inoo samxaya inaynu ka soo akh rino databaseka 1=wxa laisticmaalayaa fore loop 
-
-
-echo"<tr><td>".$row['id']."</td><td>".$row['fname']."</td><td>".$row['lastname']."</td><td>".$row['email']."</td><td>.<button> <a href='Edit.php?id=$row[id]'>Edit"."  <button> <a href='#'>DELET"."</a></button></a></button></td></tr>";//waa sida loo so galinayo xogta taaala databaseka
-
-}
-
-    }
-
-      }
-      else{
-        ?>
-    <tr>
-      <td>no data found</td> <!--used for not found-->
-    </tr>
-    <?php
-      }
-}
-
-else{
-?>
-
-  <?php //ka ka masoolka ah in oo ka soo baxo xogto tableka
-  $show="select * from registration ";
-  $res=$con->query($show);
-  if($res)//condition 
-    {
-while($row=$res->fetch_assoc()){      // fetch_assoc= waka inoo samxaya inaynu ka soo akh rino databaseka 1=wxa laisticmaalayaa fore loop 
-
-
-echo"<tr><td>".$row['id']."</td><td>".$row['fname']."</td><td>".$row['lastname']."</td><td>".$row['email']."</td><td> <button> <a href='Edit.php?id=$row[id]'>Edit"."  <button> <a href='DELET.php?id=$row[id]'>DELET"."</a></button></a></button></td></tr>";//waa sida loo so galinayo xogta taaala databaseka
-
-}
-
-    }
-}
-  ?>
-</tbody>
-</table>
 </body>
-
-<footer>
-    <div class="footer-content">
-        <p>&copy; 2026 Registration System. All rights reserved.</p>
-        <div class="social-icons">
-            <a href="https://facebook.com"><i class="fab fa-facebook"></i></a>
-            <a href="https://twitter.com"><i class="fab fa-twitter"></i></a>
-            <a href="https://instagram.com"><i class="fab fa-instagram"></i></a>
-        </div>
-    </div>
-</footer>
-
 </html>
-

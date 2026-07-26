@@ -136,6 +136,19 @@ table tr:hover{
     margin-left:10px;
 }
 
+.btnreset{
+    background:#6c757d;
+    color:#fff;
+    border:none;
+    padding:10px 20px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.btnreset:hover{
+    background:#5a6268;
+}
+
 </style>
 
 </head>
@@ -155,6 +168,9 @@ table tr:hover{
 
     <button type="submit" name="btnsearch" class="btnsearch">
         🔍 Search
+    </button>
+    <button type="button" class="btnreset" onclick="window.location='report.php'">
+        🔄 Reset
     </button>
 
 </form>
