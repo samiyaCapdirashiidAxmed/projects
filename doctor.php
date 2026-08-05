@@ -307,7 +307,7 @@ Dr. Amina Mohamed is a highly qualified medical professional with more than 12 y
 Register Doctor
 </button>
 
-<a href="forgot password.php" class="forgot-link">Forgot Password?</a>
+<a href="rem.php" class="forgot-link">Forgot Password?</a>
 
 </form>
 
