@@ -29,7 +29,7 @@ if(isset($_POST["login_btn"])){
 
 
 
-     header("Location: registration.php");
+     header("Location: dhashpood.php");
     exit();
 }else{
 
@@ -140,7 +140,7 @@ input{
 <div class="login-side">
 
 <center>
-<img src="image1.jpg" class="logo">
+<img src="logo.png" class="logo">
 <h2>Login</h2>
 </center>
 
