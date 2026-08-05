@@ -2,46 +2,72 @@
 include "conection.php";
 
 $message = "";
+$message_type = "red"; // Message box color style ("red" or "green")
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
 
-    $fullname = $_POST['fullname'];
-    $phone = $_POST['phone'];
-    $email = $_POST['email'];
-    $address = $_POST['address'];
-    $specialization = $_POST['specialization'];
-    $password = $_POST['password'];
-    $bio = $_POST['bio'];
+    $fullname         = trim($_POST['fullname']);
+    $phone            = trim($_POST['phone']);
+    $email            = trim($_POST['email']);
+    $address          = trim($_POST['address']);
+    $specialization   = trim($_POST['specialization']);
+    $password         = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+    $bio              = trim($_POST['bio']);
 
-    $sql = "INSERT INTO doctor
-    (fullname, phone, email, address, specialization, password, bio)
-    VALUES (?, ?, ?, ?, ?, ?, ?)";
+    // 1. Check if the doctor already exists in the database (by Email or Phone)
+    $check_sql  = "SELECT * FROM doctor WHERE email = ? OR phone = ? LIMIT 1";
+    $check_stmt = $con->prepare($check_sql);
 
-    $stmt = $con->prepare($sql);
+    if ($check_stmt) {
+        $check_stmt->bind_param("ss", $email, $phone);
+        $check_stmt->execute();
+        $result = $check_stmt->get_result();
 
-    $stmt->bind_param(
-        "sssssss",
-        $fullname,
-        $phone,
-        $email,
-        $address,
-        $specialization,
-        $password,
-        $bio
-    );
+        // USER ALREADY EXISTS
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
 
-    if($stmt->execute()){
-        $message = "Doctor registered successfully!";
-    }else{
-        $message = "Registration failed!";
+            // Check if the provided password matches the stored password
+            if ($user['password'] !== $password) {
+                $message = "This account already exists, but the password entered is incorrect!";
+                $message_type = "red";
+            } else {
+                $message = "This doctor is already registered, and the password is correct!";
+                $message_type = "green";
+            }
+
+        } else {
+            // NEW USER (REGISTRATION PROCESS)
+
+            // 2. Check if password and confirm password match
+            if ($password !== $confirm_password) {
+                $message = "Passwords do not match! Please try again.";
+                $message_type = "red";
+            } else {
+                // 3. Insert into Database
+                $sql  = "INSERT INTO doctor (fullname, phone, email, address, specialization, password, bio) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $con->prepare($sql);
+
+                if ($stmt) {
+                    $stmt->bind_param("sssssss", $fullname, $phone, $email, $address, $specialization, $password, $bio);
+
+                    if ($stmt->execute()) {
+                        $message = "Doctor registered successfully!";
+                        $message_type = "green";
+                    } else {
+                        $message = "Registration failed: " . $stmt->error;
+                        $message_type = "red";
+                    }
+                    $stmt->close();
+                } else {
+                    $message = "Database query preparation failed!";
+                    $message_type = "red";
+                }
+            }
+        }
+        $check_stmt->close();
     }
-}
-?>
-<?php
-$message = "";
-
-if(isset($_POST['submit'])){
-    $message = "Doctor information submitted successfully!";
 }
 ?>
 
@@ -146,9 +172,23 @@ margin-bottom:20px;
 }
 
 .message{
-color:green;
 font-weight:bold;
 margin-bottom:15px;
+padding:12px;
+border-radius:8px;
+text-align:center;
+}
+
+.message.red{
+background-color: #ffe6e6;
+color: #d9534f;
+border: 1px solid #f5c6cb;
+}
+
+.message.green{
+background-color: #d4edda;
+color: #155724;
+border: 1px solid #c3e6cb;
 }
 
 input,textarea{
@@ -176,6 +216,19 @@ button:hover{
 opacity:.9;
 }
 
+.forgot-link{
+display:block;
+text-align:center;
+margin-top:15px;
+color:#0077b6;
+text-decoration:none;
+font-weight:bold;
+}
+
+.forgot-link:hover{
+text-decoration:underline;
+}
+
 @media(max-width:900px){
 .container{
 grid-template-columns:1fr;
@@ -189,7 +242,6 @@ grid-template-columns:1fr;
 <div class="container">
 
 <!-- Doctor Profile -->
-
 <div class="card">
 
 <div class="doctor-image">
@@ -223,16 +275,17 @@ Dr. Amina Mohamed is a highly qualified medical professional with more than 12 y
 </div>
 
 <!-- Registration Form -->
-
 <div class="card">
 
 <h2>Doctor Registration</h2>
 
-<div class="message">
-<?php echo $message; ?>
-</div>
+<?php if (!empty($message)): ?>
+    <div class="message <?php echo $message_type; ?>">
+        <?php echo $message; ?>
+    </div>
+<?php endif; ?>
 
-<form method="POST">
+<form method="POST" action="">
 
 <input type="text" name="fullname" placeholder="Full Name" required>
 
@@ -253,6 +306,8 @@ Dr. Amina Mohamed is a highly qualified medical professional with more than 12 y
 <button type="submit" name="submit">
 Register Doctor
 </button>
+
+<a href="forgot password.php" class="forgot-link">Forgot Password?</a>
 
 </form>
 
