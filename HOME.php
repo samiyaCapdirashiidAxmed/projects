@@ -262,7 +262,7 @@ body{
             <sectioc class="hero-section">
                 <div class="section-contenat">
                     <div class="hero-details">
-                       <p> <h2 class="titel">BEST HOSPITAL</h2>
+                       <p> <h2 class="titel">CARE PLUS HOSPITAL</h2>
                         <h3 class="description">Make your life better with our special healthcare.</h3>
                         <p class="description">Welcome to our hospital, where every patient matters and every treatment brings hope and healing.</p>
       </p>
