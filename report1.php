@@ -15,11 +15,11 @@ if($con->connect_error){
 if(isset($_POST['btnsearch'])){
 
     $search = $con->real_escape_string($_POST['search']);
-    $sql = "SELECT * FROM appoment WHERE   fullname LIKE '%$search%'";
+    $sql = "SELECT * FROM appointments WHERE   fullname LIKE '%$search%'";
 
 }else{
 
-    $sql = "SELECT * FROM appoment";
+    $sql = "SELECT * FROM appointments";
 
 }
 
@@ -264,7 +264,7 @@ table tr:hover{
 
 </table>
 
-<a href="booking.php" class="btn">⬅ Back To Booking</a>
+<a href="appoiment.php" class="btn">⬅ Back To appoiment</a>
 
 <button class="print-btn" onclick="window.print()">
 🖨 Print Report
