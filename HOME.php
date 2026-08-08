@@ -67,8 +67,7 @@ header{
 /* Hero Section */
 .hero-section{
     min-height: 90vh;
-    background: linear-gradient(rgba(0,0,0,0.5),
-    rgba(0,0,0,0.5)),
+ 
     url('ww.gbj.jpg');
     background-size: cover;
     background-position: center;
@@ -251,7 +250,11 @@ body{
                 </ul>
                  <ul class="nav-menu">
                     <li class="nav-item">
+<<<<<<< HEAD
                         <a href="#" class="nav-link">📅REPORT</a>
+=======
+                        <a href="#" class="nav-link">📊REPORT</a>
+>>>>>>> 586773351cf70c1f4b64ed977c70226d0f92bb75
                     </li>
                 </ul>
             </nav>
@@ -281,9 +284,9 @@ body{
 <footer class="main-footer">
     <p>&copy; 2026 ISKAASHI GROUP. All Rights Reserved.</p>
     <div class="social-icons">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.facebook.com" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.twitter.com" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
     </div>
 </footer>>
 </br>

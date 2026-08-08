@@ -23,7 +23,7 @@ if (isset($_POST['book'])) {
     $time = $_POST['time'];
     $notes = $_POST['notes'];
 
-    $sql = "INSERT INTO appoment
+    $sql = "INSERT INTO appointments
     (fullname, email, phone, doctor, department, date, time, notes)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
