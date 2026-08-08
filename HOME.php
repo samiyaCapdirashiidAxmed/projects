@@ -230,28 +230,28 @@ body{
                 
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="logo.php" class="nav-link">🔑LOGING </a>
+                        <a href="#" class="nav-link">🔑LOGING </a>
                     </li>
                 </ul>
         
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="appoiment.php" class="nav-link">📅APPOMENT</a>
+                        <a href="#" class="nav-link">📅APPOMENT</a>
                     </li>
                 </ul>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="doctor.php" class="nav-link">👨‍⚕️DOCTORE </a>
+                        <a href="#" class="nav-link">👨‍⚕️DOCTORE </a>
                     </li>
                 </ul>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="booking.php" class="nav-link">📅BOOKING</a>
+                        <a href="#" class="nav-link">📅BOOKING</a>
                     </li>
                 </ul>
                  <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="reportpage.php" class="nav-link">📅REPORT</a>
+                        <a href="#" class="nav-link">📅REPORT</a>
                     </li>
                 </ul>
             </nav>
@@ -267,7 +267,7 @@ body{
                         <p class="description">Welcome to our hospital, where every patient matters and every treatment brings hope and healing.</p>
       </p>
                         <div class="buttons">
-            <a href="paint.php" class="buttons order-now">👤registration</a><br>
+            <a href="#" class="buttons order-now">👤registration</a><br>
           
         </div>      
         
