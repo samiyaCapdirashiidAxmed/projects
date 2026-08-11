@@ -325,7 +325,6 @@
                 <h2 class="logo-text">🏥 Care Plus</h2>
             </a>
             <ul class="nav-menu">
-                <li><a href="index.php" class="nav-link active">🏠 Home</a></li>
                 <li><a href="paint.php" class="nav-link">👤 Registration</a></li>
                 <li><a href="login.php" class="nav-link">🔑 Login</a></li>
                 <li><a href="appointment.php" class="nav-link">📅 Appointment</a></li>
