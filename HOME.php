@@ -1,296 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <center>
-        <meta charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>coffee websit </title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Care Plus Hospital - Home</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-/* Reset */
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        /* CSS Reset & Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-body {
-    /
-    background: #706060 url('home.jpg') no-repeat center center fixed;
-    
-    background-size: cover;
-    
-    font-family: Arial, sans-serif;
-   
-}
-/* Navbar */
-header{
-    background: #444afe;
-    padding: 15px 0;
-}
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --secondary: #0d9488;
+            --accent: #f0fdf4;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
 
-.navbar{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 90%;
-    margin: auto;
-}
+        body {
+            
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-.logo-text{
-    color: white;
-    font-size: 30px;
-}
+        /* Modern Glassmorphism & Sticky Header */
+        header {
+            background: rgba(70, 60, 60, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(156, 136, 136, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1280px;
+            margin: auto;
+            padding: 20px 0;
+        }
 
-.nav-menu{
-    list-style: none;
-    display: flex;
-}
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-.nav-item{
-    margin-left: 20px;
-}
+        .logo-text {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
 
-.nav-link{
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    transition: 0.3s;
-}
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-.nav-link:hover{
-    color: #FFD700;
-}
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px 16px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
 
-/* Hero Section */
-.hero-section{
-    min-height: 90vh;
- 
-    url('ww.gbj.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            background-color: #95cbee;
+        }
 
-.section-contenat{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 90%;
-    margin: auto;
-    color: white;
-}
+        /* Gorgeous Hero Section with Gradient Overlay */
+        .hero-section {
+            background: url('home.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 130px 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
 
-.hero-details{
-    max-width: 600px;
-}
+        .hero-content {
+            max-width: 850px;
+            margin: auto;
+        }
 
-.titel{
-    font-size: 50px;
-    color: #FFD700;
-    margin-bottom: 15px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
+        .hero-title {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--white);
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
 
-.description{
-    font-size: 20px;
-    margin-bottom: 15px;
-}
+        .hero-subtitle {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #9a9bce;
+        }
 
-.buttons{
-    margin-top: 20px;
-}
+        .hero-desc {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            color: #a6c2d8;
+        }
 
-.order-now,
-.contact-us{
-    display: inline-block;
-    text-decoration: none;
-    padding: 12px 25px;
-    margin-right: 10px;
-    border-radius: 30px;
-    font-weight: bold;
-    transition: 0.3s;
-}
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
 
-.order-now{
-    background: #e7f927;
-    color: black;
-}
+        .btn {
+            text-decoration: none;
+            padding: 15px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-.order-now:hover{
-    background: white;
-}
+        .btn-primary {
+            background-color: #10b981;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
+        }
 
-.contact-us{
-    background: transparent;
-    border: 2px solid white;
-    color: white;
-}
+        .btn-primary:hover {
+            background-color: #059669;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(16, 185, 129, 0.5);
+        }
 
-.contact-us:hover{
-    background: white;
-    color: black;
-}
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
 
-/* Image */
-.hero-image{
-    width: 400px;
-    border-radius: 150px;
-    box-shadow: 0 5px 15px rgba(153, 118, 118, 0.5);
-    height: 500;
-    border: 20px;
-    object-fit: cover;
-    background-image: url("home.jpg");
-    background-position: center;
-    
+        .btn-secondary:hover {
+            background-color: white;
+            color: var(--text-dark);
+            border-color: white;
+            transform: translateY(-3px);
+        }
 
-}
+        /* Modern Floating Feature Cards */
+        .features-section {
+            width: 90%;
+            max-width: 1200px;
+            margin: -70px auto 80px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            position: relative;
+            z-index: 10;
+        }
 
-/* Footer */
-footer{
-    background: #2d1cca;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    font-weight: bold;
-}
+        .feature-card {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
 
-/* Responsive */
-@media(max-width:768px){
-    .section-contenat{
-        flex-direction: column;
-        text-align: center;
-    }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+        }
 
-    .hero-image{
-        width: 300px;
-        margin-top: 20px;
-    }
+        .icon-box {
+            width: 75px;
+            height: 75px;
+            background: #e0f2fe;
+            color: var(--primary);
+            font-size: 30px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px auto;
+            transition: all 0.3s ease;
+        }
 
-    .navbar{
-        flex-direction: column;
-    }
+        .feature-card:hover .icon-box {
+            background: var(--primary);
+            color: var(--white);
+            transform: rotate(6deg);
+        }
 
-    .nav-menu{
-        margin-top: 10px;
-    }
-}
-body{
-    font-family: Arial, sans-serif;
-    color: #2aa3c2;
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
 
-    background-image: url('home.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
+        .feature-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-light);
+        }
 
-/* Styling-ka Social Icons */
-.social-icons {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
+        /* Professional Footer */
+        footer {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: auto;
+        }
 
-.social-icons a {
-    color: white;
-    font-size: 24px;
-    transition: 0.3s;
-}
+        footer p {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
 
-/* Saamaynta marka mouse-ka la saaro */
-.social-icons a:hover {
-    color: #dc7ce2; /* Midabka dahabiga ah */
-    transform: scale(1.2);
-}
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
 
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
-    </head>
-   
-    <body >
-         
-        <!--header/navbar-->
-        <header>
-            <nav class="navbar section-contnant">
-                <a href="#" class="nav-logo">
-                    <h2 class="logo-text">🏥hospital  </h2>
-                </a>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="paint.php" class="nav-link">👤registration</a>
-                    </li>
-                </ul>
-                
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">🔑LOGING </a>
-                    </li>
-                </ul>
-        
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">📅APPOMENT</a>
-                    </li>
-                </ul>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">👨‍⚕️DOCTORE </a>
-                    </li>
-                </ul>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">📅BOOKING</a>
-                    </li>
-                </ul>
-                 <ul class="nav-menu">
-                    <li class="nav-item">
-<<<<<<< HEAD
-                        <a href="#" class="nav-link">📅REPORT</a>
-=======
-                        <a href="#" class="nav-link">📊REPORT</a>
->>>>>>> 586773351cf70c1f4b64ed977c70226d0f92bb75
-                    </li>
-                </ul>
-            </nav>
-        </header>
-        
-        <main>
-            <!--hero section-->
-            <sectioc class="hero-section">
-                <div class="section-contenat">
-                    <div class="hero-details">
-                       <p> <h2 class="titel">CARE PLUS HOSPITAL</h2>
-                        <h3 class="description">Make your life better with our special healthcare.</h3>
-                        <p class="description">Welcome to our hospital, where every patient matters and every treatment brings hope and healing.</p>
-      </p>
-                        <div class="buttons">
-            <a href="#" class="buttons order-now">👤registration</a><br>
-          
-        </div>      
-        
-                    </div>
-                    <div class="hero-image-wrapper">
-                    </div>
-                </div>
-            </sectioc>
-        </main>
-    </body></center>
-<footer class="main-footer">
-    <p>&copy; 2026 ISKAASHI GROUP. All Rights Reserved.</p>
-    <div class="social-icons">
-        <a href="https://www.facebook.com" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-        <a href="https://www.twitter.com" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="https://www.instagram.com" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+</head>
+<body>
+
+    <!-- PHP Dynamic Header Integration Example -->
+    <?php 
+        $hospital_name = "Care Plus Hospital Booking";
+        $current_year = date("Y");
+    ?>
+
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar">
+            <a href="index.php" class="logo-link">
+                <h2 class="logo-text">🏥 Care Plus</h2>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.php" class="nav-link active">🏠 Home</a></li>
+                <li><a href="paint.php" class="nav-link">👤 Registration</a></li>
+                <li><a href="login.php" class="nav-link">🔑 Login</a></li>
+                <li><a href="appointment.php" class="nav-link">📅 Appointment</a></li>
+                <li><a href="doctors.php" class="nav-link">👨‍⚕️ Doctors</a></li>
+                <li><a href="report.php" class="nav-link">📊 Report</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title"><?php echo $hospital_name; ?></h1>
+            <h3 class="hero-subtitle">Make your life better with our special healthcare.</h3>
+            <p class="hero-desc">Welcome to our hospital, where every patient matters and every treatment brings hope, healing, and professional medical care tailored to your family's needs.</p>
+            <div class="hero-buttons">
+                <a href="paint.php" class="btn btn-primary"><i class="fas fa-user-plus"></i> Register Now</a>
+                <a href="appointment.php" class="btn btn-secondary"><i class="fas fa-calendar-alt"></i> Book Appointment</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Features Section -->
+    <div class="features-section">
+        <div class="feature-card">
+            <div class="icon-box">
+                <i class="fas fa-user-md"></i>
+            </div>
+            <h3>Qualified Doctors</h3>
+            <p>Our hospital features specialized and experienced doctors ready to help you 24/7 with professional expertise.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon-box">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <h3>Easy Booking</h3>
+            <p>Schedule your appointments online quickly and seamlessly without waiting in long hospital queues.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon-box">
+                <i class="fas fa-file-medical-alt"></i>
+            </div>
+            <h3>Medical Reports</h3>
+            <p>Access and check your medical test reports safely and securely straight through our platform.</p>
+        </div>
     </div>
-</footer>>
-</br>
-                                                                                                                                                                                                                                                                                      
 
+    <!-- Footer -->
+    <footer>
+        <p>&copy; <?php echo $current_year; ?> ISKAASHI GROUP. All Rights Reserved.</p>
+        <div class="social-icons">
+            <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
 
+</body>
 </html>
