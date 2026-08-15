@@ -88,7 +88,7 @@ font-family:'Segoe UI',sans-serif;
 }
 
 body{
-background:linear-gradient(135deg,#e8f8ff,#dff4ff,#f7fcff);
+background:linear-gradient(135deg,#13044543,#dff4ff,#f7fcff);
 min-height:100vh;
 padding:30px;
 }
@@ -114,8 +114,8 @@ margin-bottom:20px;
 }
 
 .doctor-image img{
-width:220px;
-height:220px;
+width: 100px;;
+height:100px;
 border-radius:50%;
 object-fit:cover;
 border:6px solid #00b4db;
@@ -245,7 +245,7 @@ grid-template-columns:1fr;
 <div class="card">
 
 <div class="doctor-image">
-<img src="doctor.jpg" alt="Doctor">
+<img src="logo.png" alt="Doctor">
 </div>
 
 <h1 class="doctor-name">Dr. Amina Mohamed</h1>

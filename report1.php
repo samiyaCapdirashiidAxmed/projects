@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "software_project_management1";
+$dbname = "software_project_management2";
 
 $con = new mysqli($servername, $username, $password, $dbname);
 
@@ -54,7 +54,7 @@ body{
     background:#fff;
     padding:25px;
     border-radius:12px;
-    box-shadow:0 5px 15px rgba(0,0,0,.2);
+    box-shadow:0 5px 15px rgba(141, 108, 108, 0.2);
 }
 
 /* Heading */

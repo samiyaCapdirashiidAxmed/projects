@@ -1,5 +1,5 @@
 <?php
-$con = mysqli_connect("localhost","root","","software_project_management1");
+$con = mysqli_connect("localhost","root","","software_project_management2");
 
 if(!$con){
     die("Connection Failed: " . mysqli_connect_error());
@@ -225,7 +225,7 @@ footer {
 
         <i class="fas fa-user-plus"></i>
 
-        <h1>Hospital Management</h1>
+        <h1>Hospital Appoment Booking</h1>
 
         <p>
             Register as a patient to book appointments,
