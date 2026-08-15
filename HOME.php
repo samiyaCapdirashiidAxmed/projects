@@ -121,12 +121,7 @@ header{
 .hero{
     min-height:600px;
 
-    background:
-    linear-gradient(
-        rgba(3,105,161,.75),
-        rgba(15,118,110,.70)
-    ),
-    url('home.jpg');
+    background:url('home.jpg');
 
     background-size:cover;
     background-position:center;
@@ -212,10 +207,10 @@ header{
 }
 
 .btn-register{
-    background:#10b981;
+    background:#128566;
     color:white;
 
-    box-shadow:0 8px 20px rgba(16,185,129,.3);
+    box-shadow:0 8px 20px rgba(189, 105, 15, 0.3);
 }
 
 .btn-register:hover{
@@ -223,15 +218,7 @@ header{
     transform:translateY(-3px);
 }
 
-.btn-book{
-    background:white;
-    color:#0369a1;
-}
 
-.btn-book:hover{
-    background:#e0f2fe;
-    transform:translateY(-3px);
-}
 
 
 .services{
@@ -496,7 +483,7 @@ footer p{
 
 <?php
 
-$hospital_name = "Care Plus Hospital Booking";
+$hospital_name = "C Hospital Appoment Booking";
 $current_year = date("Y");
 
 ?>
@@ -513,7 +500,7 @@ $current_year = date("Y");
 <i class="fas fa-hospital"></i>
 </div>
 
-<h2>Care <span>Plus</span></h2>
+<h2>HOSPITAL APPOMENT BOOKING</h2>
 
 </a>
 
@@ -526,25 +513,25 @@ $current_year = date("Y");
 </li>
 
 <li>
-<a href="login.php" class="login">
+<a href="#" class="login">
 <i class="fas fa-sign-in-alt"></i> Login
 </a>
 </li>
 
 <li>
-<a href="appointment.php">
+<a href="#">
 <i class="fas fa-calendar-check"></i> Appointment
 </a>
 </li>
 
 <li>
-<a href="doctors.php">
+<a href="#">
 <i class="fas fa-user-md"></i> Doctors
 </a>
 </li>
 
 <li>
-<a href="report.php">
+<a href="#">
 <i class="fas fa-file-medical"></i> Report
 </a>
 </li>
@@ -587,10 +574,6 @@ easy appointment booking, and reliable medical support for every patient.
 Register Now
 </a>
 
-<a href="appointment.php" class="btn btn-book">
-<i class="fas fa-calendar-alt"></i>
-Book Appointment
-</a>
 
 </div>
 
@@ -675,7 +658,7 @@ Modern Healthcare For Everyone
 </h2>
 
 <p>
-Care Plus Hospital Booking System makes it easier
+ Hospital Booking System makes it easier
 for patients to connect with doctors and manage
 their appointments online.
 </p>
