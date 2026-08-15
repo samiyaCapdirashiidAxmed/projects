@@ -1,11 +1,9 @@
 <?php
-
 include("conection.php");
 
 $message = "";
 
-if(isset($_POST["login_btn"])){
-
+if (isset($_POST["login_btn"])) {
     $username = trim($_POST["username"]);
     $password = trim($_POST["password"]);
 
@@ -16,39 +14,23 @@ if(isset($_POST["login_btn"])){
 
     $result = mysqli_stmt_get_result($stmt);
 
-    if(mysqli_num_rows($result) == 1){
-
+    if (mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
 
-        
-        if(trim($password) === trim($row["password"])){
+        if (trim($password) === trim($row["password"])) {
+            session_start();
+            $_SESSION["username"] = $row["username"];
+            $_SESSION["fullname"] = $row["fullname"];
 
-    session_start();
-    $_SESSION["username"] = $row["username"];
-    $_SESSION["fullname"] = $row["fullname"];
-
-
-
-     header("Location: dhashpood.php");
-    exit();
-}else{
-
-    $message = "Incorrect Password!";
-
-}
-
-        }else{
-
+            header("Location: dhashpood.php");
+            exit();
+        } else {
             $message = "Incorrect Password!";
-
         }
-
-    }else{
-
+    } else {
         $message = "Username not found!";
-
     }
-
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,19 +94,41 @@ input{
 .submit-btn:hover{
     background:#2575fc;
 }
-.forgot-password{
-    text-align:right;
-    margin:10px 0;
+.options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 14px;
 }
-.forgot-password a{
+.options-row a{
     text-decoration:none;
     color:#3c39d1;
+}
+.options-row a:hover {
+    text-decoration: underline;
 }
 .message{
     color:red;
     text-align:center;
     margin-bottom:10px;
 }
+
+.account{
+    text-align:center;
+    margin-top:15px;
+}
+
+.account a{
+    color:#3c39d1;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.account a:hover{
+    text-decoration:underline;
+}
+
 </style>
 
 </head>
@@ -145,32 +149,27 @@ input{
 </center>
 
 <?php
-if($message!=""){
+if ($message != "") {
     echo "<div class='message'>$message</div>";
 }
 ?>
 
-<form method="POST">
+<form method="POST" action="" autocomplete="off">
+    <input type="text" name="username" placeholder="Username" autocomplete="off" required>
+    <input type="password" name="password" placeholder="Password" autocomplete="new-password" required>
+    
+    <div class="options-row">
+     
+    
+        <a href="#">Forgot Password?</a>
+    </div>
 
-<input type="text" name="username" placeholder="Enter Username" required>
-
-<input type="password" name="password" placeholder="Enter Password" required>
-
-<div class="forgot-password">
-<a href="forgot_password.php">Forgot Password?</a>
-</div>
-
-<button type="submit" name="login_btn" class="submit-btn">
-LOGIN
-</button>
-
+    <button type="submit" name="login_btn" class="submit-btn">Login</button>
+      <div class="account">
+            need account?
+            <a href="paint.php">create account</a>
+        </div>
 </form>
-
-<br>
-
-<center>
-<a href="paint.php">Need an account? Register</a>
-</center>
 
 </div>
 
