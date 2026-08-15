@@ -1,298 +1,247 @@
-
-
 <?php
-include_once("conection.php");
-$idbanaan=$fnamebanaan=$lastnamebanaan=$emailbanaan="";
-if (isset($_POST['btnsave'])){
-    // conditions of if
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "software_project_management2";
 
-    $id=$_POST["txtid"];
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-        $idd=$_POST["txtidd"];
-
-
-    $name=$_POST['txtfirst'];
-    $last=$_POST['txtlast'];
-       $emial=$_POST['txtemail'];
-
-//hadii oo banaayey soo gali
-if(empty($id)){
-$idbanaan="please enter your id";
-
-}
- if(empty($name)){
-$fnamebanaan="please enter your ferst name";
-//echo $fnamebanaan;
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-if(empty($name)){
-$lastnamebanaan="please enter your last name";
+$message = "";
+$original_name = $_GET['fullname'] ?? '';
 
-}
-if(empty($name)){
-$emailbanaan="please enter your last email";
+// Update record when form is submitted using fullname
+if (isset($_POST['update'])) {
+    $fullname = $_POST['fullname'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $doctor = $_POST['doctor'];
+    $department = $_POST['department'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
+    $currency = $_POST['currency'];
+    $amount = $_POST['amount'];
+    $payment_method = $_POST['payment_method'];
+    $hidden_original = $_POST['hidden_original'];
 
-}
+    $update_sql = "UPDATE appointments SET fullname=?, email=?, phone=?, doctor=?, department=?, date=?, time=?, currency=?, amount=?, payment_method=? WHERE fullname=?";
+    $stmt = $conn->prepare($update_sql);
+    $stmt->bind_param("sssssssdsss", $fullname, $email, $phone, $doctor, $department, $date, $time, $currency, $amount, $payment_method, $hidden_original);
 
-if(!preg_match("/^[0-9]{1,6}$/",$id))
-    {
-          echo"id must not be more than 6 digits".$id;
-     
-
+    if ($stmt->execute()) {
+        $message = "Appointment updated successfully! <a href='report1.php'>View Report</a>";
+        $original_name = $fullname;
+    } else {
+        $message = "Update failed: " . $conn->error;
     }
-    else if (preg_match('/^[0-9]{6}$/',$id)){
-    
-        echo"valid id".$id;
-    }
-    else{
-$sql="update registration set id='".$id."',fname='".$name."',lastname='".$last."',email='".$emial."'where id='".$idd."'";//waa halka ay ka soo galyaan xogta databaseka hadii aya singl cout double ka 
-
-$result=$con->query($sql); // waxa oo ku xidhmayaa sql page kii kale ee ahaa conectionka 
-echo"this information was updated";
-header("location:registration.php");//waa ka in tusaaya jogna edit page ka  ina goo  registrationka  ;
-
-    //waa inta soo saray sa marka add ka tagtid mid kamida 
-    echo"welecom your id  is :-".$id;
-    
-  
-    echo"welecom your name is :-".$name;
-
-  
-    echo"welecom your name is :-".$last;
-
-     
-    echo"welecom your name is :-".$emial;
-    }
-
+    $stmt->close();
 }
-$ed= "select * from registration where id= '".$_GET['id']."'";
-$re=$con->query($ed);
-$show=mysqli_fetch_array($re);    
+
+// Fetch existing data using fullname
+$sql = "SELECT * FROM appointments WHERE fullname = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $original_name);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>second php lesson</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-
-/* BODY */
-body{
-    margin:0;
-    padding:0;
-    font-family:Arial, Helvetica, sans-serif;
-    background:#001f54;   /* Navy Blue */
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Appointment</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-/* HEADING */
-h1{
-    position:absolute;
-    top:20px;
-    color:white;
-    font-size:32px;
-    font-weight:bold;
+body {
+    background-color: #f8f9fa;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* FORM */
-form{
-    width:420px;
-    background:white;
-    padding:35px;
-    border-radius:15px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+.container {
+    width: 600px;
+    background: #ffffff;
+    padding: 30px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* LABELS */
-label{
-    font-weight:bold;
-    color:#222;
+h2 {
+    color: #333333;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 22px;
 }
 
-/* INPUTS */
-input[type="text"],
-input[type="number"]{
-    width:100%;
-    padding:12px;
-    margin-top:8px;
-    margin-bottom:18px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:16px;
-    box-sizing:border-box;
+label {
+    display: block;
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 6px;
+    font-size: 14px;
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus{
-    border:2px solid #0066ff;
-    outline:none;
-    box-shadow:0 0 10px rgba(0,102,255,.4);
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #495057;
 }
 
-/* BUTTON */
-input[type="submit"]{
-    width:100%;
-    padding:13px;
-    background:#0066ff;
-    color:white;
-    font-size:18px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    transition:0.4s;
+.payment-group {
+    display: flex;
+    gap: 10px;
 }
 
-/* BUTTON HOVER */
-input[type="submit"]:hover{
-    background:#00b894;
-    transform:scale(1.05);
-    box-shadow:0 5px 15px rgba(0,0,0,.3);
+.payment-group select {
+    flex: 1;
 }
 
-/* ERROR TEXT */
-span{
-    color:red;
-    font-size:14px;
+.payment-group input {
+    flex: 2;
 }
 
-/* MOBILE */
-@media(max-width:500px){
-    form{
-        width:90%;
-        padding:20px;
-    }
-
-    h1{
-        font-size:24px;
-    }
-}
-  /* Social Media Icons */
-.social-icons{
-    position:absolute;
-    bottom:30px;
-    display:flex;
-    gap:20px;
+input:focus, select:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-.social-icons a{
-    width:50px;
-    height:50px;
-    background:white;
-    color:#001f54;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-decoration:none;
-    font-size:22px;
-    transition:0.4s;
-    box-shadow:0 5px 10px rgba(0,0,0,.3);
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-/* Hover Effects */
-.social-icons a:hover{
-    transform:translateY(-8px);
+button:hover {
+    background-color: #0056b3;
 }
 
-/* Facebook */
-.social-icons a:nth-child(1):hover{
-    background:#1877F2;
-    color:white;
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-/* Instagram */
-.social-icons a:nth-child(2):hover{
-    background:#E1306C;
-    color:white;
+.btn-back {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #6c757d;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
 }
 
-/* Twitter */
-.social-icons a:nth-child(3):hover{
-    background:#1DA1F2;
-    color:white;
+.btn-back:hover {
+    color: #343a40;
+    text-decoration: underline;
 }
-
-/* LinkedIn */
-.social-icons a:nth-child(4):hover{
-    background:#0077B5;
-    color:white;
-}
-
-/* WhatsApp */
-.social-icons a:nth-child(5):hover{
-    background:#25D366;
-    color:white;
-}      
-    </style>
-        
-
-
+</style>
 </head>
-<body >
-    <h1>  EDITE YOURE REGISTRATION</h1>
+<body>
 
+<div class="container">
+    <h2>Edit Appointment</h2>
 
-    <form method="POST" >
+    <?php if($message != ""): ?>
+        <div class='success'><?php echo $message; ?></div>
+    <?php endif; ?>
 
-            ID care:  <input type ="number " name ="txtid" value="<?php echo $show['id']  ?>">
-              <input type ="hidden"  name ="txtidd" value="<?php echo $show['id']  ?>">
+    <?php if($row): ?>
+    <form method="POST">
+        <!-- Hidden field to keep track of the original name even if the user changes it -->
+        <input type="hidden" name="hidden_original" value="<?php echo htmlspecialchars($original_name); ?>">
 
-        
-    <?php
-    echo $idbanaan;
-    ?>
+        <label>Full Name:</label>
+        <input type="text" name="fullname" value="<?php echo htmlspecialchars($row['fullname']); ?>" required>
 
-    <br>
-    <br>
-    <BR>
+        <label>Email Address:</label>
+        <input type="email" name="email" value="<?php echo htmlspecialchars($row['email']); ?>" required>
 
-     f-name :<input type ="text " name ="txtfirst" value="<?php echo $show['fname']  ?>">
-     <?php
-     echo $fnamebanaan; //waa ku wa inoo suragalinaaya
-  ?>
-</BR>
+        <label>Phone Number:</label>
+        <input type="text" name="phone" value="<?php echo htmlspecialchars($row['phone']); ?>" required>
 
-  <br>
-  
-<BR>
-    last-name :<input type ="text " name ="txtlast" value="<?php echo $show['lastname']  ?>">
-    <?php
-echo $lastnamebanaan;
-  ?>
-</BR>
+        <label>Doctor:</label>
+        <select name="doctor" required>
+            <option <?php if($row['doctor']=='Dr. Amina Mohamed') echo 'selected'; ?>>Dr. Amina Mohamed</option>
+            <option <?php if($row['doctor']=='Dr. Fatima Ali') echo 'selected'; ?>>Dr. Fatima Ali</option>
+            <option <?php if($row['doctor']=='Dr. Maryan Hassan') echo 'selected'; ?>>Dr. Maryan Hassan</option>
+        </select>
 
-  <br>
-  
-    <BR>
-     emial:<input type ="text " name ="txtemail" value="<?php echo $show['email']  ?>">
-      <?php
-echo $emailbanaan;
-  ?>
-    <br>
-<BR>
-<input type ="submit" name="btnsave" value="UPDATE"> 
-</br>
-<br>
+        <label>Department:</label>
+        <select name="department" required>
+            <option <?php if($row['department']=='Cardiology') echo 'selected'; ?>>Cardiology</option>
+            <option <?php if($row['department']=='General Medicine') echo 'selected'; ?>>General Medicine</option>
+            <option <?php if($row['department']=='Pediatrics') echo 'selected'; ?>>Pediatrics</option>
+            <option <?php if($row['department']=='Orthopedics') echo 'selected'; ?>>Orthopedics</option>
+        </select>
 
-<div class="social-icons">
-    <a href="#"><i class="fab fa-facebook-f"></i></a>
-    <a href="#"><i class="fab fa-instagram"></i></a>
-    <a href="#"><i class="fab fa-twitter"></i></a>
-    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-    <a href="#"><i class="fab fa-whatsapp"></i></a>
+        <label>Date:</label>
+        <input type="date" name="date" value="<?php echo $row['date']; ?>" required>
+
+        <label>Time:</label>
+        <input type="time" name="time" value="<?php echo $row['time']; ?>" required>
+
+        <label>Payment Amount & Currency:</label>
+        <div class="payment-group">
+            <select name="currency" required>
+                <option value="USD" <?php if(isset($row['currency']) && $row['currency']=='USD') echo 'selected'; ?>>USD ($)</option>
+                <option value="Shilling" <?php if(isset($row['currency']) && $row['currency']=='Shilling') echo 'selected'; ?>>Shilling</option>
+            </select>
+            <input type="number" step="0.01" name="amount" value="<?php echo htmlspecialchars($row['amount'] ?? ''); ?>" placeholder="Amount" required>
+        </div>
+
+        <label>Payment Method:</label>
+        <select name="payment_method" required>
+            <option value="">Select Payment Method</option>
+            <option value="ZAAD Service" <?php if(isset($row['payment_method']) && $row['payment_method']=='ZAAD Service') echo 'selected'; ?>>ZAAD Service</option>
+            <option value="E-DAHAB" <?php if(isset($row['payment_method']) && $row['payment_method']=='E-DAHAB') echo 'selected'; ?>>E-DAHAB</option>
+            <option value="DAHAB PLUS" <?php if(isset($row['payment_method']) && $row['payment_method']=='DAHAB PLUS') echo 'selected'; ?>>DAHAB PLUS</option>
+        </select>
+
+        <button type="submit" name="update">Update Appointment</button>
+    </form>
+    <?php else: ?>
+        <p style="text-align:center; color:red;">Record not found!</p>
+    <?php endif; ?>
+
+    <a href="report.php" class="btn-back">Back to Report</a>
 </div>
-
-</form>
-
-
-
-
 
 </body>
 </html>

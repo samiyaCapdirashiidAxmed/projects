@@ -1,280 +1,221 @@
 <?php
-// Database Connection
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "software_project_management2";
 
-$con = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-if($con->connect_error){
-    die("Connection Failed: ".$con->connect_error);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Search
-if(isset($_POST['btnsearch'])){
+$message = "";
 
-    $search = $con->real_escape_string($_POST['search']);
-    $sql = "SELECT * FROM appointments WHERE   fullname LIKE '%$search%'";
-
-}else{
-
-    $sql = "SELECT * FROM appointments";
-
+// Handle Delete Request by Full Name
+if (isset($_GET['delete'])) {
+    $fullname_to_delete = $_GET['delete'];
+    $del_sql = "DELETE FROM appointments WHERE fullname = ?";
+    $stmt = $conn->prepare($del_sql);
+    $stmt->bind_param("s", $fullname_to_delete);
+    if ($stmt->execute()) {
+        $message = "Appointment deleted successfully!";
+    }
+    $stmt->close();
 }
 
-$result = $con->query($sql);
+// Handle Search Query
+$search = "";
+if (isset($_GET['search'])) {
+    $search = trim($_GET['search']);
+    $sql = "SELECT * FROM appointments WHERE fullname LIKE ? OR phone LIKE ? ORDER BY fullname DESC";
+    $stmt = $conn->prepare($sql);
+    $searchTerm = "%" . $search . "%";
+    $stmt->bind_param("ss", $searchTerm, $searchTerm);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $sql = "SELECT * FROM appointments ORDER BY fullname DESC";
+    $result = $conn->query($sql);
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Hospital Booking Report</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Appointment Report & Management</title>
 <style>
-/* Reset */
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
-
 body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f4f7fb;
+    background:#f4f7f6;
     padding:30px;
 }
-
-/* Container */
 .container{
-    width:95%;
-    max-width:1200px;
-    margin:auto;
+    max-width:1300px;
+    margin:0 auto;
     background:#fff;
-    padding:25px;
-    border-radius:12px;
-    box-shadow:0 5px 15px rgba(141, 108, 108, 0.2);
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
 }
-
-/* Heading */
-h1{
+h2{
+    color:#0077b6;
+    margin-bottom:20px;
     text-align:center;
-    color:#0d6efd;
-    margin-bottom:25px;
 }
-
-/* Search Box */
-.search-box{
+.top-controls{
     display:flex;
-    justify-content:center;
-    gap:10px;
-    margin-bottom:25px;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
     flex-wrap:wrap;
+    gap:10px;
 }
-
-.search-box input{
-    width:320px;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    font-size:16px;
+.search-form {
+    display:flex;
+    gap:10px;
 }
-
-.btnsearch{
-    background:#0d6efd;
-    color:#fff;
+.search-form input {
+    padding:10px;
+    width:250px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:14px;
+}
+.btn {
+    padding:10px 15px;
     border:none;
-    padding:12px 20px;
-    border-radius:6px;
+    border-radius:8px;
     cursor:pointer;
-    font-size:16px;
-}
-
-.btnsearch:hover{
-    background:#0b5ed7;
-}
-
-.back{
+    font-weight:bold;
     text-decoration:none;
-    background:#6c757d;
     color:white;
-    padding:12px 20px;
-    border-radius:6px;
+    font-size:14px;
 }
+.btn-primary { background:#0077b6; }
+.btn-success { background:#28a745; }
+.btn-danger { background:#dc3545; }
+.btn-secondary { background:#6c757d; }
+.btn:hover { opacity:.9; }
 
-.back:hover{
-    background:#5c636a;
+.success{
+    background:#d4edda;
+    color:#155724;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:20px;
+    text-align:center;
+    font-weight:bold;
 }
-
-/* Table */
 table{
     width:100%;
     border-collapse:collapse;
-    margin-top:20px;
+    margin-top:10px;
 }
-
-table th{
-    background:#0d6efd;
-    color:white;
-    padding:14px;
-    border:1px solid #ddd;
+th, td{
+    padding:12px 10px;
+    text-align:left;
+    border-bottom:1px solid #ddd;
+    font-size:13px;
 }
-
-table td{
-    padding:12px;
-    border:1px solid #ddd;
-    text-align:center;
-}
-
-table tr:nth-child(even){
-    background:#f8f9fa;
-}
-
-table tr:hover{
-    background:#dbeafe;
-}
-
-/* Buttons */
-.btn,
-.print-btn{
-    display:inline-block;
-    margin-top:25px;
-    padding:12px 20px;
-    border-radius:6px;
-    text-decoration:none;
-    font-size:16px;
-    cursor:pointer;
-    border:none;
-}
-
-.btn{
-    background:#198754;
+th{
+    background:#0077b6;
     color:white;
 }
-
-.btn:hover{
-    background:#157347;
+tr:hover{
+    background:#f1f9fc;
 }
-
-.print-btn{
-    background:#fd7e14;
-    color:white;
-    float:right;
+.actions{
+    display:flex;
+    gap:5px;
 }
-
-.print-btn:hover{
-    background:#e76b00;
-}
-
-/* Print */
-@media print{
-
-    .search-box,
-    .btn,
-    .print-btn{
-        display:none;
+@media print {
+    .top-controls, .actions, .btn {
+        display: none !important;
     }
-
-    body{
-        background:white;
-        padding:0;
+    body {
+        background: white;
+        padding: 0;
     }
-
-    .container{
-        box-shadow:none;
-        width:100%;
+    .container {
+        box-shadow: none;
+        padding: 0;
     }
 }
-
-/* Mobile */
-@media(max-width:768px){
-
-    table{
-        display:block;
-        overflow-x:auto;
-        white-space:nowrap;
-    }
-
-    .print-btn,
-    .btn{
-        width:100%;
-        margin-top:15px;
-        float:none;
-        text-align:center;
-    }
-}
-
-
 </style>
-
 </head>
 <body>
 
 <div class="container">
+    <h2>Hospital Appointments Report</h2>
 
-<h1>🏥 Hospital  Report</h1>
+    <?php if($message != ""): ?>
+        <div class='success'><?php echo $message; ?></div>
+    <?php endif; ?>
 
-<form method="POST" class="search-box">
+    <div class="top-controls">
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search by name or phone..." value="<?php echo htmlspecialchars($search); ?>">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <?php if(!empty($search)): ?>
+                <a href="report.php" class="btn btn-secondary">Reset</a>
+            <?php endif; ?>
+        </form>
 
-    <input
-        type="text"
-        name="search"
-        placeholder="Enter Patient Name"
-        value="<?php echo isset($_POST['search']) ? $_POST['search'] : ''; ?>">
+        <div>
+            <button onclick="window.print()" class="btn btn-success">Print Report</button>
+            <a href="index.php" class="btn btn-secondary">Back to Booking</a>
+        </div>
+    </div>
 
-    <button type="submit" name="btnsearch" class="btnsearch">
-        🔍 Search
-    </button>
-    
-    <a href="report1.php" class="back">
-        🔄 Reset
-</a>
-
-</form>
-
-<table>
-
- <th>Name</th><th>Email</th><th>Phone</th><th>Doctor</th>
-                <th>Department</th><th>Date</th><th>Time</th>
-
-
-
- <?php
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr>
-                        <td>{$row['fullname']}</td>
-                        <td>{$row['email']}</td>
-                        <td>{$row['phone']}</td>
-                        <td>{$row['doctor']}</td>
-                        <td>{$row['department']}</td>
-                        <td>{$row['date']}</td
-                        ><td>{$row['time']}</td>
-                    </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='7'>No appointments found.</td></tr>";
-            }
-           
-
-   
-
-?>
-
-</table>
-
-<a href="appoiment.php" class="btn">⬅ Back To appoiment</a>
-
-<button class="print-btn" onclick="window.print()">
-🖨 Print Report
-</button>
-
+    <table>
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Doctor</th>
+                <th>Department</th>
+                <th>Date & Time</th>
+                <th>Amount</th>
+                <th>Method</th>
+                <th class="actions-col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($result->num_rows > 0): ?>
+                <?php while($row = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['fullname']); ?></td>
+                        <td><?php echo htmlspecialchars($row['phone']); ?></td>
+                        <td><?php echo htmlspecialchars($row['email']); ?></td>
+                        <td><?php echo htmlspecialchars($row['doctor']); ?></td>
+                        <td><?php echo htmlspecialchars($row['department']); ?></td>
+                        <td><?php echo $row['date'] . ' ' . $row['time']; ?></td>
+                        <td><?php echo $row['amount'] . ' ' . $row['currency']; ?></td>
+                        <td><?php echo htmlspecialchars($row['payment_method']); ?></td>
+                        <td class="actions">
+                            <a href="edit.php?fullname=<?php echo urlencode($row['fullname']); ?>" class="btn btn-primary" style="padding:6px 10px; font-size:12px;">Edit</a>
+                            <a href="report.php?delete=<?php echo urlencode($row['fullname']); ?>" class="btn btn-danger" style="padding:6px 10px; font-size:12px;" onclick="return confirm('Are you sure you want to delete this appointment?');">Delete</a>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="9" style="text-align:center; padding:20px; color:#777;">No records found.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
 
 </body>
 </html>
-
-<?php
-$con->close();
-?>
+<?php $conn->close(); ?>
