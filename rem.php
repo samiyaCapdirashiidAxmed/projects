@@ -173,7 +173,7 @@ Reset Password
 
 </form>
 
-<a href="doctor_registration.php">← Back to Registration</a>
+<a href="doctor.php">← Back to Doctor </a>
 
 </div>
 
