@@ -15,58 +15,64 @@ if (isset($_POST['submit'])) {
     $confirm_password = $_POST['confirm_password'];
     $bio              = trim($_POST['bio']);
 
-    // 1. Check if the doctor already exists in the database (by Email or Phone)
-    $check_sql  = "SELECT * FROM doctor WHERE email = ? OR phone = ? LIMIT 1";
-    $check_stmt = $con->prepare($check_sql);
+    // PHP Validation: Ensure Full Name contains letters and spaces only (no numbers/symbols)
+    if (!preg_match("/^[a-zA-Z\s]+$/", $fullname)) {
+        $message = "Full Name must contain letters and spaces only (no numbers allowed)!";
+        $message_type = "red";
+    } else {
+        // 1. Check if the doctor already exists in the database (by Email or Phone)
+        $check_sql  = "SELECT * FROM doctor WHERE email = ? OR phone = ? LIMIT 1";
+        $check_stmt = $con->prepare($check_sql);
 
-    if ($check_stmt) {
-        $check_stmt->bind_param("ss", $email, $phone);
-        $check_stmt->execute();
-        $result = $check_stmt->get_result();
+        if ($check_stmt) {
+            $check_stmt->bind_param("ss", $email, $phone);
+            $check_stmt->execute();
+            $result = $check_stmt->get_result();
 
-        // USER ALREADY EXISTS
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
+            // USER ALREADY EXISTS
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
 
-            // Check if the provided password matches the stored password
-            if ($user['password'] !== $password) {
-                $message = "This account already exists, but the password entered is incorrect!";
-                $message_type = "red";
+                // Check if the provided password matches the stored password
+                if ($user['password'] !== $password) {
+                    $message = "This account already exists, but the password entered is incorrect!";
+                    $message_type = "red";
+                } else {
+                    $message = "This doctor is already registered, and the password is correct!";
+                    $message_type = "green";
+                }
+
             } else {
-                $message = "This doctor is already registered, and the password is correct!";
-                $message_type = "green";
-            }
+                // NEW USER (REGISTRATION PROCESS)
 
-        } else {
-            // NEW USER (REGISTRATION PROCESS)
+                // 2. Check if password and confirm password match
+                if ($password !== $confirm_password) {
+                    $message = "Passwords do not match! Please try again.";
+                    $message_type = "red";
+                } else {
+                    // 3. Insert into Database
+                    $sql  = "INSERT INTO doctor (fullname, phone, email, address, specialization, password, bio) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    $stmt = $con->prepare($sql);
 
-            // 2. Check if password and confirm password match
-            if ($password !== $confirm_password) {
-                $message = "Passwords do not match! Please try again.";
-                $message_type = "red";
-            } else {
-                // 3. Insert into Database
-                $sql  = "INSERT INTO doctor (fullname, phone, email, address, specialization, password, bio) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                $stmt = $con->prepare($sql);
+                    if ($stmt) {
+                        $stmt->bind_param("sssssss", $fullname, $phone, $email, $address, $specialization, $password, $bio);
 
-                if ($stmt) {
-                    $stmt->bind_param("sssssss", $fullname, $phone, $email, $address, $specialization, $password, $bio);
-
-                    if ($stmt->execute()) {
-                        $message = "Doctor registered successfully!";
-                        $message_type = "green";
+                        if ($stmt->execute()) {
+                            $message = "Doctor registered successfully!";
+                            $message_type = "green";
+                        } else {
+                            $message = "Registration failed: " . $stmt->error;
+                            $message_type = "red";
+                        }
+                        $stmt->close();
                     } else {
-                        $message = "Registration failed: " . $stmt->error;
+                        $message = "Database query preparation failed!";
                         $message_type = "red";
                     }
-                    $stmt->close();
-                } else {
-                    $message = "Database query preparation failed!";
-                    $message_type = "red";
                 }
             }
+            $check_stmt->close();
         }
-        $check_stmt->close();
     }
 }
 ?>
@@ -114,7 +120,7 @@ margin-bottom:20px;
 }
 
 .doctor-image img{
-width: 100px;;
+width: 100px;
 height:100px;
 border-radius:50%;
 object-fit:cover;
@@ -287,7 +293,14 @@ Dr. Amina Mohamed is a highly qualified medical professional with more than 12 y
 
 <form method="POST" action="">
 
-<input type="text" name="fullname" placeholder="Full Name" required>
+<input 
+  type="text" 
+  name="fullname" 
+  placeholder="Full Name" 
+  pattern="[A-Za-z\s]+" 
+  title="Full Name must contain letters and spaces only" 
+  oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" 
+  required>
 
 <input type="text" name="phone" placeholder="Phone Number" required>
 
