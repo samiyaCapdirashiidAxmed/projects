@@ -1,245 +1,951 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "software_project_management2";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$con = mysqli_connect(
+    "localhost",
+    "root",
+    "",
+    "software_project_management2"
+);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!$con) {
+    die("Database connection failed: " . mysqli_connect_error());
 }
 
-$message = "";
 
-// Handle Delete Request by patient name
-if (isset($_GET['delete'])) {
-    $patient_to_delete = $_GET['delete'];
-    $del_sql = "DELETE FROM booking WHERE patient = ?";
-    $stmt = $conn->prepare($del_sql);
-    $stmt->bind_param("s", $patient_to_delete);
-    if ($stmt->execute()) {
-        $message = "Booking deleted successfully!";
-    }
-    $stmt->close();
-}
+/* =========================
+   TOTAL REGISTERED PATIENTS
+========================= */
 
-// Handle Search Query
-$search = "";
-if (isset($_GET['search'])) {
-    $search = trim($_GET['search']);
-    $sql = "SELECT * FROM booking WHERE patient LIKE ? OR room LIKE ? ORDER BY patient DESC";
-    $stmt = $conn->prepare($sql);
-    $searchTerm = "%" . $search . "%";
-    $stmt->bind_param("ss", $searchTerm, $searchTerm);
-    $stmt->execute();
-    $result = $stmt->get_result();
-} else {
-    $sql = "SELECT * FROM booking ORDER BY patient DESC";
-    $result = $conn->query($sql);
-}
+$totalQuery = mysqli_query(
+    $con,
+    "SELECT COUNT(*) AS total FROM registration1"
+);
+
+$totalData = mysqli_fetch_assoc($totalQuery);
+
+$totalPatients = $totalData['total'];
+
+
+/* =========================
+   MALE PATIENTS
+========================= */
+
+$maleQuery = mysqli_query(
+    $con,
+    "SELECT COUNT(*) AS total
+     FROM registration1
+     WHERE gender = 'Male'"
+);
+
+$maleData = mysqli_fetch_assoc($maleQuery);
+
+$malePatients = $maleData['total'];
+
+
+/* =========================
+   FEMALE PATIENTS
+========================= */
+
+$femaleQuery = mysqli_query(
+    $con,
+    "SELECT COUNT(*) AS total
+     FROM registration1
+     WHERE gender = 'Female'"
+);
+
+$femaleData = mysqli_fetch_assoc($femaleQuery);
+
+$femalePatients = $femaleData['total'];
+
+
+/* =========================
+   ALL REGISTERED PATIENTS
+========================= */
+
+$patients = mysqli_query(
+    $con,
+    "SELECT fullname, username, email, phone, gender, age
+     FROM registration1
+     ORDER BY fullname ASC"
+);
+
 ?>
 
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hospital Room Booking Report</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Patient Registration Report</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+
+/* =========================
+   GENERAL
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
-body {
-    background-color: #f8f9fa;
-    padding: 30px;
+body{
+
+    background:#f4f7fb;
+
+    color:#263238;
+
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: #ffffff;
-    padding: 30px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+    top:0;
+
+    width:230px;
+
+    height:100vh;
+
+    background:#111c44;
+
+    padding:25px 15px;
+
+    color:white;
+
 }
 
-h2 {
-    color: #333333;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 24px;
+.logo{
+
+    text-align:center;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    margin-bottom:40px;
+
 }
 
-.top-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
+.logo i{
+
+    color:#4da3ff;
+
+    margin-right:8px;
+
 }
 
-.search-form {
-    display: flex;
-    gap: 10px;
+.menu{
+
+    list-style:none;
+
 }
 
-.search-form input {
-    padding: 10px 12px;
-    width: 250px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-size: 14px;
+.menu li{
+
+    margin-bottom:10px;
+
 }
 
-.btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
-    display: inline-block;
+.menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    padding:14px;
+
+    color:#cbd3e6;
+
+    text-decoration:none;
+
+    border-radius:8px;
+
+    transition:.3s;
+
 }
 
-.btn-primary { background-color: #007bff; }
-.btn-primary:hover { background-color: #0056b3; }
+.menu a:hover,
+.menu a.active{
 
-.btn-success { background-color: #28a745; }
-.btn-success:hover { background-color: #218838; }
+    background:#263b82;
 
-.btn-danger { background-color: #dc3545; }
-.btn-danger:hover { background-color: #c82333; }
+    color:white;
 
-.btn-secondary { background-color: #6c757d; }
-.btn-secondary:hover { background-color: #5a6268; }
-
-.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 14px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
+.menu i{
+
+    width:20px;
+
 }
 
-th, td {
-    padding: 12px 10px;
-    text-align: left;
-    border-bottom: 1px solid #dee2e6;
-    font-size: 14px;
-    color: #495057;
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+
+    margin-left:230px;
+
+    padding:30px;
+
 }
 
-th {
-    background-color: #343a40;
-    color: white;
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
 }
 
-tr:hover {
-    background-color: #f1f3f5;
+.header h1{
+
+    color:#172554;
+
+    font-size:30px;
+
 }
 
-.actions {
-    display: flex;
-    gap: 5px;
+.header p{
+
+    color:#718096;
+
+    margin-top:7px;
+
 }
 
-@media print {
-    .top-controls, .actions-col, .actions, .btn {
-        display: none !important;
+.header-icon{
+
+    width:55px;
+
+    height:55px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border-radius:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:24px;
+
+}
+
+
+/* =========================
+   SUMMARY CARDS
+========================= */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+.card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 3px 12px rgba(0,0,0,.07);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.card-icon{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:10px;
+
+    background:#eaf3ff;
+
+    color:#2563eb;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:23px;
+
+}
+
+.card h2{
+
+    font-size:28px;
+
+    color:#172554;
+
+}
+
+.card p{
+
+    color:#718096;
+
+    font-size:14px;
+
+    margin-top:5px;
+
+}
+
+
+/* =========================
+   REPORT
+========================= */
+
+.report{
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 3px 12px rgba(0,0,0,.07);
+
+    overflow:hidden;
+
+}
+
+.report-header{
+
+    padding:22px;
+
+    border-bottom:
+    1px solid #e5e7eb;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.report-header h2{
+
+    color:#172554;
+
+    font-size:21px;
+
+}
+
+.report-header p{
+
+    color:#718096;
+
+    margin-top:6px;
+
+    font-size:14px;
+
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table-box{
+
+    overflow-x:auto;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+thead{
+
+    background:#172554;
+
+    color:white;
+
+}
+
+th{
+
+    padding:15px;
+
+    text-align:left;
+
+    font-size:14px;
+
+}
+
+td{
+
+    padding:14px 15px;
+
+    border-bottom:
+    1px solid #edf0f5;
+
+    font-size:14px;
+
+}
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+
+/* =========================
+   GENDER
+========================= */
+
+.male{
+
+    background:#e0efff;
+
+    color:#1769aa;
+
+    padding:5px 11px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.female{
+
+    background:#ffe5f0;
+
+    color:#c2185b;
+
+    padding:5px 11px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+
+    text-align:center;
+
+    padding:50px;
+
+    color:#94a3b8;
+
+}
+
+.empty i{
+
+    font-size:45px;
+
+    margin-bottom:15px;
+
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .sidebar{
+
+        width:70px;
+
     }
-    body {
-        background: white;
-        padding: 0;
+
+    .logo span,
+    .menu span{
+
+        display:none;
+
     }
-    .container {
-        border: none;
-        box-shadow: none;
-        padding: 0;
+
+    .main{
+
+        margin-left:70px;
+
     }
+
+    .cards{
+
+        grid-template-columns:1fr;
+
+    }
+
 }
+
 </style>
+
 </head>
+
+
 <body>
 
-<div class="container">
-    <h2>Hospital Room Booking Report</h2>
 
-    <?php if($message != ""): ?>
-        <div class='success'><?php echo $message; ?></div>
-    <?php endif; ?>
+<!-- =========================
+     SIDEBAR
+========================= -->
 
-    <div class="top-controls">
-        <form method="GET" class="search-form">
-            <input type="text" name="search" placeholder="Search by patient or room..." value="<?php echo htmlspecialchars($search); ?>">
-            <button type="submit" class="btn btn-primary">Search</button>
-            <?php if(!empty($search)): ?>
-                <a href="report.php" class="btn btn-secondary">Reset</a>
-            <?php endif; ?>
-        </form>
+<div class="sidebar">
 
-        <div>
-            <button onclick="window.print()" class="btn btn-success">Print Report</button>
-            <a href="index.php" class="btn btn-secondary">New Booking</a>
-        </div>
+    <div class="logo">
+
+        <i class="fas fa-hospital"></i>
+
+        <span>HOSPITAL</span>
+
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Patient Name</th>
-                <th>Room Type</th>
-                <th>Check-in</th>
-                <th>Check-out</th>
-                <th>Amount</th>
-                <th>Payment Method</th>
-                <th class="actions-col">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($result->num_rows > 0): ?>
-                <?php while($row = $result->fetch_assoc()): ?>
+
+    <ul class="menu">
+
+        <li>
+
+            <a href="#">
+
+                <i class="fas fa-chart-line"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a href="#" class="active">
+
+                <i class="fas fa-file-medical"></i>
+
+                <span>Registration Report</span>
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a href="#">
+
+                <i class="fas fa-user-doctor"></i>
+
+                <span>Doctors</span>
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a href="#">
+
+                <i class="fas fa-calendar-check"></i>
+
+                <span>Appointments</span>
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a href="#">
+
+                <i class="fas fa-users"></i>
+
+                <span>Patients</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</div>
+
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="main">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>Patient Registration Report</h1>
+
+            <p>
+                Complete report of registered patients
+            </p>
+
+        </div>
+
+
+        <div class="header-icon">
+
+            <i class="fas fa-file-medical"></i>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+
+                <i class="fas fa-users"></i>
+
+            </div>
+
+            <div>
+
+                <h2>
+                    <?php echo $totalPatients; ?>
+                </h2>
+
+                <p>
+                    Total Registered
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-icon">
+
+                <i class="fas fa-mars"></i>
+
+            </div>
+
+            <div>
+
+                <h2>
+                    <?php echo $malePatients; ?>
+                </h2>
+
+                <p>
+                    Male Patients
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-icon">
+
+                <i class="fas fa-venus"></i>
+
+            </div>
+
+            <div>
+
+                <h2>
+                    <?php echo $femalePatients; ?>
+                </h2>
+
+                <p>
+                    Female Patients
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- REGISTRATION REPORT -->
+
+    <div class="report">
+
+
+        <div class="report-header">
+
+            <div>
+
+                <h2>
+
+                    <i class="fas fa-users"></i>
+
+                    Registered Patients
+
+                </h2>
+
+                <p>
+                    List of all patients registered
+                    in the hospital system.
+                </p>
+
+            </div>
+
+
+            <i class="fas fa-clipboard-list"
+            style="
+            font-size:28px;
+            color:#2563eb;
+            ">
+            </i>
+
+        </div>
+
+
+
+        <!-- TABLE -->
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
                     <tr>
-                        <td><?php echo htmlspecialchars($row['patient']); ?></td>
-                        <td><?php echo htmlspecialchars($row['room']); ?></td>
-                        <td><?php echo htmlspecialchars($row['date_in']); ?></td>
-                        <td><?php echo htmlspecialchars($row['date_out']); ?></td>
-                        <td><?php echo htmlspecialchars($row['amount'] . ' ' . $row['currency']); ?></td>
-                        <td><?php echo htmlspecialchars($row['payment_method']); ?></td>
-                        <td class="actions actions-col">
-                            <!-- Waxaa loo gudbinayaa magaca bukaanka halkii ay ahaan lahayd id -->
-                            <a href="editing.php?patient=<?php echo urlencode($row['patient']); ?>" class="btn btn-primary" style="padding: 6px 10px; font-size: 12px;">Edit</a>
-                            <a href="report.php?delete=<?php echo urlencode($row['patient']); ?>" class="btn btn-danger" style="padding: 6px 10px; font-size: 12px;" onclick="return confirm('Are you sure you want to delete this booking?');">Delete</a>
-                        </td>
+
+                        <th>#</th>
+
+                        <th>Full Name</th>
+
+                        <th>Username</th>
+
+                        <th>Email</th>
+
+                        <th>Phone</th>
+
+                        <th>Gender</th>
+
+                        <th>Age</th>
+
                     </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="7" style="text-align:center; padding: 20px; color: #6c757d;">No booking records found.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+
+                </thead>
+
+
+                <tbody>
+
+                <?php
+
+                $number = 1;
+
+                if(mysqli_num_rows($patients) > 0){
+
+                    while($row =
+                    mysqli_fetch_assoc($patients)){
+
+                ?>
+
+                    <tr>
+
+                        <td>
+                            <?php echo $number++; ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                $row['fullname']
+                            );
+                            ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                $row['username']
+                            );
+                            ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                $row['email']
+                            );
+                            ?>
+                        </td>
+
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                $row['phone']
+                            );
+                            ?>
+                        </td>
+
+                        <td>
+
+                            <?php
+
+                            if($row['gender'] == "Male"){
+
+                                echo
+                                '<span class="male">
+                                Male
+                                </span>';
+
+                            }else{
+
+                                echo
+                                '<span class="female">
+                                Female
+                                </span>';
+
+                            }
+
+                            ?>
+
+                        </td>
+
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                $row['age']
+                            );
+                            ?>
+                        </td>
+
+                    </tr>
+
+                <?php
+
+                    }
+
+                }else{
+
+                ?>
+
+                    <tr>
+
+                        <td colspan="7">
+
+                            <div class="empty">
+
+                                <i class="
+                                fas fa-folder-open">
+                                </i>
+
+                                <br>
+
+                                No registered patients
+                                found.
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                <?php
+
+                }
+
+                ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
 </div>
 
 </body>
+
 </html>
-<?php $conn->close(); ?>
