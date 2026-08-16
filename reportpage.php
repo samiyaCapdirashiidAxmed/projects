@@ -62,7 +62,6 @@
     <p>Please select the section you would like to view the data from:</p>
     
     <a href="report1.php" class="btn">📅 Appointments Report</a>
-    <a href="report3.php" class="btn">👨‍⚕️ Doctors Report</a>
     <a href="report.php" class="btn">👥 BOOKING Report</a>
     <a href="report2.php" class="btn">👥 Registration Report</a>
     <br>

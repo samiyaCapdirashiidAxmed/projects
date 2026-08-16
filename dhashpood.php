@@ -3,7 +3,7 @@ include "conection.php";
 
 // Total Doctors
 $doctor = mysqli_query($con, "SELECT COUNT(*) AS total FROM appointments");
-$doctor_total = mysqli_fetch_assoc($doctor)['total'];
+$appoment_total = mysqli_fetch_assoc($doctor)['total'];
 
 // Total Patients
 $patient = mysqli_query($con, "SELECT COUNT(*) AS total FROM registration1");
@@ -201,8 +201,8 @@ Hospital Appoment Booking System Dashboard
 
 <a href="appoiment.php">📅 Appointment</a>
 
-<a href="booking.php">📑 Booking Report</a>
-<a href="reportpage.php">📋 Doctor Report</a>
+<a href="booking.php">📑 Booking </a>
+<a href="reportpage.php">📋  Report</a>
 
 <a href="logo.php">🚪 Logout</a>
 
@@ -213,13 +213,13 @@ Hospital Appoment Booking System Dashboard
 <div class="cards">
 
 <div class="card">
-<h3>BOOKING </h3>
+<h3>Appoment </h3>
 
-<h1><?php echo $doctor_total; ?></h1>
+<h1><?php echo $appoment_total; ?></h1>
 
 <p>Total booking</p>
 
-<a href="report.php">View Report</a>
+<a href="report1.php">View Report</a>
 
 </div>
 
@@ -237,26 +237,16 @@ Hospital Appoment Booking System Dashboard
 
 <div class="card">
 
-<h3>📅 Appointments</h3>
+<h3>📅 BOOking</h3>
 
 <h1><?php echo $booking_total; ?></h1>
 
 <p>Total appoment</p>
 
-<a href="report1.php">View Report</a>
+<a href="report.php">View Report</a>
 
 </div>
-<div class="card">
 
-<h3>doctors</h3>
-
-<h1><?php echo $booking_total; ?></h1>
-
-<p>Total doctors</p>
-
-<a href="report3.php">View Report</a>
-
-</div>
 
 </div>
 

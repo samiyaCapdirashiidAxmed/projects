@@ -1,231 +1,245 @@
 <?php
-// Database Connection
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "software_project_management2";
 
-$con = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-if($con->connect_error){
-    die("Connection Failed: ".$con->connect_error);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Search
-if(isset($_POST['btnsearch'])){
+$message = "";
 
-    $search = $con->real_escape_string($_POST['search']);
-    $sql = "SELECT * FROM booking WHERE patient LIKE '%$search%'";
-
-}else{
-
-    $sql = "SELECT * FROM booking";
-
+// Handle Delete Request by patient name
+if (isset($_GET['delete'])) {
+    $patient_to_delete = $_GET['delete'];
+    $del_sql = "DELETE FROM booking WHERE patient = ?";
+    $stmt = $conn->prepare($del_sql);
+    $stmt->bind_param("s", $patient_to_delete);
+    if ($stmt->execute()) {
+        $message = "Booking deleted successfully!";
+    }
+    $stmt->close();
 }
 
-$result = $con->query($sql);
+// Handle Search Query
+$search = "";
+if (isset($_GET['search'])) {
+    $search = trim($_GET['search']);
+    $sql = "SELECT * FROM booking WHERE patient LIKE ? OR room LIKE ? ORDER BY patient DESC";
+    $stmt = $conn->prepare($sql);
+    $searchTerm = "%" . $search . "%";
+    $stmt->bind_param("ss", $searchTerm, $searchTerm);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $sql = "SELECT * FROM booking ORDER BY patient DESC";
+    $result = $conn->query($sql);
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Hospital Booking Report</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Room Booking Report</title>
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-body{
-    font-family:'Segoe UI',sans-serif;
-    background:#ffffff;
-    min-height:100vh;
-    padding:40px;
+body {
+    background-color: #f8f9fa;
+    padding: 30px;
 }
 
-.container{
-    width:95%;
-    max-width:1200px;
-    margin:auto;
-    background:#fff;
-    border-radius:15px;
-    padding:30px;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 30px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-h1{
-    text-align:center;
-    color:#0d6efd;
-    margin-bottom:25px;
+h2 {
+    color: #333333;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
 }
 
-.search-box{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin-bottom:20px;
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.search-box input{
-    padding:10px;
-    width:250px;
-    border:1px solid #0d6efd;
-    border-radius:5px;
+.search-form {
+    display: flex;
+    gap: 10px;
 }
 
-.btnsearch{
-    background:#0d6efd;
-    color:#fff;
-    border:none;
-    padding:10px 20px;
-    border-radius:5px;
-    cursor:pointer;
+.search-form input {
+    padding: 10px 12px;
+    width: 250px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
 }
 
-.btnsearch:hover{
-    background:#0b5ed7;
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+    display: inline-block;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+.btn-primary { background-color: #007bff; }
+.btn-primary:hover { background-color: #0056b3; }
+
+.btn-success { background-color: #28a745; }
+.btn-success:hover { background-color: #218838; }
+
+.btn-danger { background-color: #dc3545; }
+.btn-danger:hover { background-color: #c82333; }
+
+.btn-secondary { background-color: #6c757d; }
+.btn-secondary:hover { background-color: #5a6268; }
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
 }
 
-table th{
-    background:#0d6efd;
-    color:#fff;
-    padding:15px;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
 }
 
-table td{
-    padding:14px;
-    border-bottom:1px solid #ddd;
-    text-align:center;
+th, td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 14px;
+    color: #495057;
 }
 
-table tr:nth-child(even){
-    background:#f8f9fa;
+th {
+    background-color: #343a40;
+    color: white;
 }
 
-table tr:hover{
-    background:#d6ecff;
+tr:hover {
+    background-color: #f1f3f5;
 }
 
-.btn{
-    display:inline-block;
-    margin-top:20px;
-    padding:12px 25px;
-    background:#0d6efd;
-    color:#fff;
-    text-decoration:none;
-    border-radius:8px;
-    font-weight:bold;
+.actions {
+    display: flex;
+    gap: 5px;
 }
 
-.btn:hover{
-    background:#0b5ed7;
+@media print {
+    .top-controls, .actions-col, .actions, .btn {
+        display: none !important;
+    }
+    body {
+        background: white;
+        padding: 0;
+    }
+    .container {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
 }
-
-.print{
-    border:none;
-    cursor:pointer;
-    margin-left:10px;
-}
-
-.btnreset{
-    background:#6c757d;
-    color:#fff;
-    border:none;
-    padding:10px 20px;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-.btnreset:hover{
-    background:#5a6268;
-}
-
 </style>
-
 </head>
 <body>
 
 <div class="container">
+    <h2>Hospital Room Booking Report</h2>
 
-<h1>🏥 Hospital Room Booking Report</h1>
+    <?php if($message != ""): ?>
+        <div class='success'><?php echo $message; ?></div>
+    <?php endif; ?>
 
-<form method="POST" class="search-box">
+    <div class="top-controls">
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search by patient or room..." value="<?php echo htmlspecialchars($search); ?>">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <?php if(!empty($search)): ?>
+                <a href="report.php" class="btn btn-secondary">Reset</a>
+            <?php endif; ?>
+        </form>
 
-    <input
-        type="text"
-        name="search"
-        placeholder="Enter Patient Name"
-        value="<?php echo isset($_POST['search']) ? $_POST['search'] : ''; ?>">
+        <div>
+            <button onclick="window.print()" class="btn btn-success">Print Report</button>
+            <a href="booking.php" class="btn btn-secondary">New Booking</a>
+        </div>
+    </div>
 
-    <button type="submit" name="btnsearch" class="btnsearch">
-        🔍 Search
-    </button>
-    <button type="button" class="btnreset" onclick="window.location='report.php'">
-        🔄 Reset
-    </button>
-
-</form>
-
-<table>
-
-<tr>
-    <th>Patient Name</th>
-    <th>Room Type</th>
-    <th>Check In</th>
-    <th>Check Out</th>
-</tr>
-
-<?php
-
-if($result->num_rows > 0){
-
-    while($row = $result->fetch_assoc()){
-
-?>
-
-<tr>
-
-    <td><?php echo $row['patient']; ?></td>
-    <td><?php echo $row['room']; ?></td>
-    <td><?php echo $row['date_in']; ?></td>
-    <td><?php echo $row['date_out']; ?></td>
-
-</tr>
-
-<?php
-
-    }
-
-}else{
-
-    echo "<tr><td colspan='4'>No Booking Records Found</td></tr>";
-
-}
-
-?>
-
-</table>
-
-<a href="booking.php" class="btn">⬅ Back To Booking</a>
-
-<button type="button" class="btn print" onclick="window.print()">
-🖨 Print Report
-</button>
-
+    <table>
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Room Type</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th class="actions-col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($result->num_rows > 0): ?>
+                <?php while($row = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['patient']); ?></td>
+                        <td><?php echo htmlspecialchars($row['room']); ?></td>
+                        <td><?php echo htmlspecialchars($row['date_in']); ?></td>
+                        <td><?php echo htmlspecialchars($row['date_out']); ?></td>
+                        <td><?php echo htmlspecialchars($row['amount'] . ' ' . $row['currency']); ?></td>
+                        <td><?php echo htmlspecialchars($row['payment_method']); ?></td>
+                        <td class="actions actions-col">
+                            <!-- Waxaa loo gudbinayaa magaca bukaanka halkii ay ahaan lahayd id -->
+                            <a href="editing.php?patient=<?php echo urlencode($row['patient']); ?>" class="btn btn-primary" style="padding: 6px 10px; font-size: 12px;">Edit</a>
+                            <a href="report.php?delete=<?php echo urlencode($row['patient']); ?>" class="btn btn-danger" style="padding: 6px 10px; font-size: 12px;" onclick="return confirm('Are you sure you want to delete this booking?');">Delete</a>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7" style="text-align:center; padding: 20px; color: #6c757d;">No booking records found.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
 
 </body>
 </html>
-
-<?php
-$con->close();
-?>
+<?php $conn->close(); ?>
