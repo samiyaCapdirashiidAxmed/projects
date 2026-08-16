@@ -14,7 +14,7 @@ $message = "";
 
 if (isset($_POST['book'])) {
 
-    $fullname = $_POST['fullname'];
+    $fullname = trim($_POST['fullname']);
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $doctor = $_POST['doctor'];
@@ -26,34 +26,39 @@ if (isset($_POST['book'])) {
     $amount = $_POST['amount'];
     $payment_method = $_POST['payment_method'];
 
-    // Insert appointment & payment data into database
-    $sql = "INSERT INTO appointments
-    (fullname, email, phone, doctor, department, date, time, notes, currency, amount, payment_method)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param(
-        "sssssssssds",
-        $fullname,
-        $email,
-        $phone,
-        $doctor,
-        $department,
-        $date,
-        $time,
-        $notes,
-        $currency,
-        $amount,
-        $payment_method
-    );
-
-    if ($stmt->execute()) {
-        $message = "Appointment booked and payment recorded successfully!";
+    // PHP Validation: Ensure Full Name contains letters and spaces only (no numbers)
+    if (!preg_match("/^[a-zA-Z\s]+$/", $fullname)) {
+        $message = "Full Name must contain letters and spaces only (no numbers allowed)!";
     } else {
-        $message = "Booking failed! Error: " . $conn->error;
-    }
+        // Insert appointment & payment data into database
+        $sql = "INSERT INTO appointments
+        (fullname, email, phone, doctor, department, date, time, notes, currency, amount, payment_method)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    $stmt->close();
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param(
+            "sssssssssds",
+            $fullname,
+            $email,
+            $phone,
+            $doctor,
+            $department,
+            $date,
+            $time,
+            $notes,
+            $currency,
+            $amount,
+            $payment_method
+        );
+
+        if ($stmt->execute()) {
+            $message = "Appointment booked and payment recorded successfully!";
+        } else {
+            $message = "Booking failed! Error: " . $conn->error;
+        }
+
+        $stmt->close();
+    }
 }
 
 $conn->close();
@@ -229,7 +234,14 @@ button:hover{
 
     <form method="POST">
 
-      <input type="text" name="fullname" placeholder="Full Name" required>
+      <input 
+        type="text" 
+        name="fullname" 
+        placeholder="Full Name" 
+        pattern="[A-Za-z\s]+" 
+        title="Full Name must contain letters and spaces only" 
+        oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" 
+        required>
 
       <input type="email" name="email" placeholder="Email Address" required>
 
