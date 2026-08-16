@@ -20,7 +20,12 @@ if(isset($_POST['register'])){
     $password = trim($_POST['password']);
     $confirm_password = trim($_POST['confirm_password']);
 
-    if($password != $confirm_password){
+    // PHP Backend Validation: Allow only letters and white space in Full Name
+    if(!preg_match("/^[a-zA-Z\s]+$/", $fullname)){
+
+        $message = "Full Name must contain letters and spaces only (no numbers or special characters)!";
+
+    }else if($password != $confirm_password){
 
         $message = "Passwords do not match!";
 
@@ -41,7 +46,7 @@ if(isset($_POST['register'])){
 
             if(mysqli_query($con, $sql)){
                 header("Location: logo.php");
-    exit();
+                exit();
             }else{
                 $message = "Registration Failed: " . mysqli_error($con);
             }
@@ -233,15 +238,9 @@ footer {
         </p>
         <div class="social-icons">
 
-   
-        
-
-</div>
-        
+        </div>
 
     </div>
-    
-    
 
     <!-- Right Side -->
     <div class="right">
@@ -254,9 +253,10 @@ footer {
         }
         ?>
 
-        <form  method="POST">
+        <form method="POST">
 
-            <input type="text" name="fullname" placeholder="Full Name" required>
+            <!-- Updated Input Field: Only accepts letters and spaces -->
+            <input type="text" name="fullname" placeholder="Full Name" pattern="[A-Za-z\s]+" title="Full Name should only contain letters and spaces." oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" required>
 
             <input type="text" name="username" placeholder="Username" required>
 
@@ -292,6 +292,4 @@ footer {
 </div>
 
 </body>
-
-
 </html>
