@@ -155,8 +155,8 @@ if ($message != "") {
 ?>
 
 <form method="POST" action="" autocomplete="off">
-    <input type="text" name="username" placeholder="Username" autocomplete="off" required>
-    <input type="password" name="password" placeholder="Password" autocomplete="new-password" required>
+    <input type="password" name="username" placeholder="Username" autocomplete="off" required>
+    <input type="text" name="password" placeholder="Password" autocomplete="new-password" required>
     
     <div class="options-row">
      
