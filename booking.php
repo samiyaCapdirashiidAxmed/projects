@@ -17,7 +17,7 @@ $message = "";
 // When the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $patient = $_POST['patient'];
+    $patient = trim($_POST['patient']);
     $room = $_POST['room'];
     $date_in = $_POST['date_in'];
     $date_out = $_POST['date_out'];
@@ -25,20 +25,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST['amount'];
     $payment_method = $_POST['payment_method'];
 
-    // Insert booking into database
-    $sql = "INSERT INTO booking (patient, room, date_in, date_out, currency, amount, payment_method)
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssds", $patient, $room, $date_in, $date_out, $currency, $amount, $payment_method);
-
-    if ($stmt->execute()) {
-        $message = "<p class='success'>Room booked and payment recorded successfully!</p>";
+    // PHP Validation: Ensure Patient Name contains letters and spaces only
+    if (!preg_match("/^[a-zA-Z\s]+$/", $patient)) {
+        $message = "<p class='error'>Patient Name must contain letters and spaces only (no numbers)!</p>";
     } else {
-        $message = "<p class='error'>Booking failed! Error: " . $conn->error . "</p>";
-    }
+        // Insert booking into database
+        $sql = "INSERT INTO booking (patient, room, date_in, date_out, currency, amount, payment_method)
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    $stmt->close();
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssds", $patient, $room, $date_in, $date_out, $currency, $amount, $payment_method);
+
+        if ($stmt->execute()) {
+            $message = "<p class='success'>Room booked and payment recorded successfully!</p>";
+        } else {
+            $message = "<p class='error'>Booking failed! Error: " . $conn->error . "</p>";
+        }
+
+        $stmt->close();
+    }
 }
 
 $conn->close();
@@ -141,7 +146,7 @@ $conn->close();
     <?php if (!empty($message)) echo $message; ?>
     
     <form method="POST">
-      <input type="text" name="patient" placeholder="Patient Name" required>
+      <input type="text" name="patient" placeholder="Patient Name" pattern="[A-Za-z\s]+" title="Patient Name must contain letters and spaces only" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" required>
       
       <select name="room" required>
         <option value="">Select Room Type</option>
